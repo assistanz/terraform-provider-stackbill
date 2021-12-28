@@ -1,0 +1,4 @@
+/terraform-provider-stackbill
+/examples/**/.terraform
+/examples/**/.terraform.lock.hcl
+/examples/**/terraform.tfstate
