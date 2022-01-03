@@ -32,6 +32,7 @@ func (p *provider) Provider() *schema.Provider {
 	pro := &schema.Provider{
 		ResourcesMap: map[string]*schema.Resource{
 			"stackbill_instance": instance.InstanceProvider(),
+			"stackbill_actions":  instance.InstanceActionsProvider(),
 		},
 		Schema: map[string]*schema.Schema{
 			"api_key": {

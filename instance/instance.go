@@ -45,6 +45,7 @@ type IInstance interface {
 	Read(context.Context, *schema.ResourceData, interface{}) diag.Diagnostics
 	Update(context.Context, *schema.ResourceData, interface{}) diag.Diagnostics
 	Delete(context.Context, *schema.ResourceData, interface{}) diag.Diagnostics
+	UpdateName(string, string, interface{}) error
 }
 
 //Instance Request Object
@@ -93,6 +94,8 @@ func (vs *instance) Create(ctx context.Context, d *schema.ResourceData, meta int
 	logs.Info("Validation successful...!")
 	logs.Info("Instance create request initiated...!")
 	endPoint := api.GetInstanceCreateApi()
+	d.SetId("ssss")
+	return diags
 	response, err := httpClient.PostJson(endPoint, apiKey, secretKey, instanceReq)
 	if err != nil {
 		logs.Info(err.Error())
@@ -128,9 +131,32 @@ func (vs *instance) Read(ctx context.Context, d *schema.ResourceData, meta inter
 // TODO - Documentation
 func (vs *instance) Update(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	// Meta information
-	// m := meta.(*auth.AuthKeys)
+	m := meta.(*auth.AuthKeys)
 	// Warning or errors can be collected in a slice type
 	var diags diag.Diagnostics
+	logs.Info("Getting the api and secret keys...!")
+	apiKey := m.ApiKey
+	secretKey := m.SecretKey
+	// Check the api key and secret key whether not empty
+	if apiKey == "" || secretKey == "" {
+		logs.Info("ApiKey or SecretKey does not exist...!")
+		return diag.FromErr(errors.New("ApiKey or SecretKey does not exist...!"))
+	}
+	// Check any changes occured in the name
+	if d.HasChange("name") {
+		err := vs.UpdateName(d.Get("name").(string), d.Get("id").(string), m)
+		if err != nil {
+			return diag.FromErr(err)
+		}
+	}
+	// Check any changes occured in the compute offering
+	if d.HasChange("compute_offering_uuid") {
+		logs.Info("Changes ----- Changes " + d.Get("compute_offering_uuid").(string))
+	}
+	// Check any changes occured in the compute offering
+	if d.HasChange("storage_offering_uuid") {
+		logs.Info("Changes ----- Changes " + d.Get("storage_offering_uuid").(string))
+	}
 	return diags
 }
 
@@ -142,4 +168,34 @@ func (vs *instance) Delete(ctx context.Context, d *schema.ResourceData, meta int
 	// Warning or errors can be collected in a slice type
 	var diags diag.Diagnostics
 	return diags
+}
+
+// Update Instance Name
+// TODO - Documentation
+func (vs *instance) UpdateName(name string, uuid string, meta interface{}) error {
+	// Meta information
+	// m := meta.(*auth.AuthKeys)
+	// logs.Info("Getting the api and secret keys...!")
+	// apiKey := m.ApiKey
+	// secretKey := m.SecretKey
+	// // Warning or errors can be collected in a slice type
+	// var diags diag.Diagnostics
+	// // Cheking validation
+	// if name == "" {
+	// 	err := errors.New("Instance name does not exist...!")
+	// 	logs.Info(err.Error())
+	// 	return err
+	// }
+	// logs.Info("Validation successful...!")
+	// logs.Info("Instance name update request initiated...!")
+	// endPoint := api.GetInstanceNameUpdateApi()
+	// d.SetId("ssss")
+	// return diags
+	// response, err := httpClient.PostJson(endPoint, apiKey, secretKey, instanceReq)
+	// if err != nil {
+	// 	logs.Info(err.Error())
+	// 	return err
+	// }
+	// logs.Info("Instance update name successful...!")
+	return nil
 }
