@@ -8,7 +8,7 @@ import (
 )
 
 var (
-	p stackbill.IProvider = stackbill.NewProvider()
+	p stackbill.ProviderI = stackbill.NewProvider()
 )
 
 // Main function with plugin initilization

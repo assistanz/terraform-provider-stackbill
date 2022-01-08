@@ -4,17 +4,13 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
-var (
-	newInstance IInstance = NewInstance()
-)
-
 func InstanceProvider() *schema.Resource {
 	return &schema.Resource{
 		Description:   "Instance Api's",
-		CreateContext: newInstance.Create,
-		ReadContext:   newInstance.Read,
-		UpdateContext: newInstance.Update,
-		DeleteContext: newInstance.Delete,
+		CreateContext: instanceObj.Create,
+		ReadContext:   instanceObj.Read,
+		UpdateContext: instanceObj.Update,
+		DeleteContext: instanceObj.Delete,
 		Schema: map[string]*schema.Schema{
 			"compute_offering_uuid": &schema.Schema{
 				Type:     schema.TypeString,

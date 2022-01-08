@@ -2,9 +2,12 @@ package api
 
 var (
 	instancePostApi       = "instance/createInstance"
-	instanceNameUpdateApi = "instance/updateName"
+	instanceNameUpdateApi = "instance/updateInstanceName"
 	instanceStart         = "instance/startInstance"
 	instanceStop          = "instance/stopInstance"
+	instanceDelete        = "instance/destroyInstance"
+	instanceResize        = "instance/resizeVm"
+	instanceList          = "instance/instanceList"
 )
 
 // Instance create api
@@ -25,4 +28,19 @@ func GetInstanceStartApi() string {
 // Stop instance api
 func GetInstanceStopApi() string {
 	return EndPoint + "/" + instanceStop
+}
+
+// Delete instance api
+func GetInstanceDeleteApi() string {
+	return EndPoint + "/" + instanceDelete
+}
+
+// Instance Resize api
+func GetInstanceResizeApi() string {
+	return EndPoint + "/" + instanceResize
+}
+
+// Instance List api
+func GetInstanceListApi(zoneId string) string {
+	return EndPoint + "/" + instanceList + "?zoneUuid=" + zoneId
 }

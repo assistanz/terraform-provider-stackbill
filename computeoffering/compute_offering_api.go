@@ -1,0 +1,43 @@
+package computeoffering
+
+import (
+	"terraform-provider-stackbill/api"
+	"terraform-provider-stackbill/auth"
+)
+
+// New Compute Offering Api
+func NewComputeOfferingApi() ComputeOfferingApiI {
+	return &computeOfferingApi{}
+}
+
+// Compute Offering Api Interface
+type ComputeOfferingApiI interface {
+	ListComputeOfferings(string, string, interface{}) (string, error)
+}
+
+// Compute Offering Api object
+type computeOfferingApi struct {
+}
+
+/* List Compute offerings
+@Param - Zone uuid - required
+@Param - Compute offering uuid - Optional
+@Param - Meta Information - Api key & Secret Key.
+It will be generated autmatically By terraform
+@Return Response / Error
+*/
+func (co *computeOfferingApi) ListComputeOfferings(zoneId string, uuid string, meta interface{}) (string, error) {
+	// Meta information
+	m := meta.(*auth.AuthKeys)
+	apiKey := m.ApiKey
+	secretKey := m.SecretKey
+	endPoint := api.GetComputeOfferingListApi(zoneId)
+	if uuid != "" {
+		endPoint += "&uuid=" + uuid
+	}
+	response, err := httpClient.Get(endPoint, apiKey, secretKey)
+	if err != nil {
+		return "", err
+	}
+	return string(response), nil
+}

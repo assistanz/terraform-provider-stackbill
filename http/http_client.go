@@ -68,7 +68,7 @@ func (c *httpClient) Get(endPoint string, apiKey string, secretKey string) (stri
 	}
 	defer resp.Body.Close()
 	// Check the status code
-	if resp.StatusCode > 200 {
+	if resp.StatusCode > 202 {
 		return "", errors.New(string(body))
 	}
 	return string(body), nil
@@ -108,7 +108,7 @@ func (c *httpClient) PostJson(endPoint string, apiKey string, secretKey string, 
 		return "", err
 	}
 	// Check the status
-	if resp.StatusCode > 200 {
+	if resp.StatusCode > 202 {
 		return "", errors.New(string(body))
 	}
 	defer resp.Body.Close()
@@ -149,7 +149,7 @@ func (c *httpClient) PutJson(endPoint string, apiKey string, secretKey string, d
 		return "", err
 	}
 	// Check the status
-	if resp.StatusCode > 200 {
+	if resp.StatusCode > 202 {
 		return "", errors.New(string(body))
 	}
 	defer resp.Body.Close()
@@ -187,7 +187,7 @@ func (c *httpClient) Delete(endPoint string, apiKey string, secretKey string) (s
 		return "", err
 	}
 	// Check the status
-	if resp.StatusCode > 200 {
+	if resp.StatusCode > 202 {
 		return "", errors.New(string(body))
 	}
 	defer resp.Body.Close()
