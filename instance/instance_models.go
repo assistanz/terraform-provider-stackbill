@@ -22,6 +22,12 @@ type UpdateNameRequest struct {
 	Name string `json:"displayName" validate:"required"`
 }
 
+// Reset Ssh Key Request object
+type ResetSshkeyRequest struct {
+	Uuid     string `json:"uuid" validate:"required"`
+	SshkeyId string `json:"sshKeyId" validate:"required"`
+}
+
 // Resize VM request
 type ResizeRequest struct {
 	Uuid         string `json:"uuid" validate:"required"`

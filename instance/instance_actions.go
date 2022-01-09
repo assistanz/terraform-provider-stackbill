@@ -86,6 +86,8 @@ func (vs *instanceActions) Update(ctx context.Context, d *schema.ResourceData, m
 func (vs *instanceActions) Delete(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	// Meta information
 	// m := meta.(*auth.AuthKeys)
+	// Reset the terraform state
+	d.SetId("")
 	// Warning or errors can be collected in a slice type
 	var diags diag.Diagnostics
 	return diags

@@ -78,6 +78,7 @@ func (vs *instance) Update(ctx context.Context, d *schema.ResourceData, meta int
 		updateNameRequest := instanceUtilsObj.GetUpdateInstanceNameRequest(d)
 		response, err := instanceApiObj.UpdateInstanceName(updateNameRequest, meta)
 		if err != nil {
+			logs.Info(err.Error())
 			return diag.FromErr(err)
 		}
 		logs.Info(response)
@@ -94,6 +95,18 @@ func (vs *instance) Update(ctx context.Context, d *schema.ResourceData, meta int
 		}
 		logs.Info(response)
 		logs.Info("Instance resize successful...!")
+	}
+	// Check any changes occured in the compute offering
+	if d.HasChange("ssh_key_name") {
+		logs.Info("Instance Reset sshkey initiated...!")
+		resetSshkeyRequest := instanceUtilsObj.GetResetSshKeyInstanceRequest(d)
+		response, err := instanceApiObj.ResetSshKey(resetSshkeyRequest, meta)
+		if err != nil {
+			logs.Info(err.Error())
+			return diag.FromErr(err)
+		}
+		logs.Info(response)
+		logs.Info("Instance Reset sshkey successful...!")
 	}
 	// Check any changes occured in the compute offering
 	if d.HasChange("storage_offering_uuid") {

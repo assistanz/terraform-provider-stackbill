@@ -5,7 +5,9 @@ import (
 	"terraform-provider-stackbill/auth"
 	"terraform-provider-stackbill/computeoffering"
 	"terraform-provider-stackbill/instance"
+	"terraform-provider-stackbill/iso"
 	"terraform-provider-stackbill/network"
+	"terraform-provider-stackbill/sshkey"
 	"terraform-provider-stackbill/storageoffering"
 	"terraform-provider-stackbill/template"
 	"terraform-provider-stackbill/zone"
@@ -36,8 +38,11 @@ func NewProvider() ProviderI {
 func (p *provider) Provider() *schema.Provider {
 	pro := &schema.Provider{
 		ResourcesMap: map[string]*schema.Resource{
-			"stackbill_instance":         instance.InstanceProvider(),
-			"stackbill_instance_actions": instance.InstanceActionsProvider(),
+			"stackbill_instance":              instance.InstanceProvider(),
+			"stackbill_instance_actions":      instance.InstanceActionsProvider(),
+			"stackbill_instance_update_name":  instance.InstanceUpdateNameProvider(),
+			"stackbill_instance_resize":       instance.InstanceResizeProvider(),
+			"stackbill_instance_reset_sshkey": instance.InstanceResetSshKeyProvider(),
 		},
 		DataSourcesMap: map[string]*schema.Resource{
 			"stackbill_compute_offerings_list": computeoffering.ComputeOfferingListProvider(),
@@ -46,6 +51,8 @@ func (p *provider) Provider() *schema.Provider {
 			"stackbill_storage_offerings_list": storageoffering.StorageOfferingListProvider(),
 			"stackbill_zone_list":              zone.ZoneListProvider(),
 			"stackbill_template_list":          template.TemplateListProvider(),
+			"stackbill_sshkey_list":            sshkey.SshkeyListProvider(),
+			"stackbill_iso_list":               iso.IsoListProvider(),
 		},
 		Schema: map[string]*schema.Schema{
 			"api_key": {

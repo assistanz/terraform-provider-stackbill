@@ -20,6 +20,7 @@ func NewInstanceApi() InstanceApiI {
 type InstanceApiI interface {
 	CreateInstance(CreateRequest, interface{}) (string, error)
 	UpdateInstanceName(UpdateNameRequest, interface{}) (string, error)
+	ResetSshKey(ResetSshkeyRequest, interface{}) (string, error)
 	ResizeInstance(ResizeRequest, interface{}) (string, error)
 	InstanceActions(InstanceActionRequest, interface{}) (string, error)
 	ListInstances(string, string, interface{}) (string, error)
@@ -46,6 +47,21 @@ func (ia *instanceApi) CreateInstance(cr CreateRequest, meta interface{}) (strin
 }
 
 // Update Instance Name
+// TODO - Documentation
+func (ia *instanceApi) ResetSshKey(rsr ResetSshkeyRequest, meta interface{}) (string, error) {
+	// Meta information
+	m := meta.(*auth.AuthKeys)
+	apiKey := m.ApiKey
+	secretKey := m.SecretKey
+	endPoint := api.GetResetSshkeyApi(rsr.Uuid, rsr.SshkeyId)
+	response, err := httpClient.Get(endPoint, apiKey, secretKey)
+	if err != nil {
+		return "", err
+	}
+	return string(response), nil
+}
+
+// Reset ssh key
 // TODO - Documentation
 func (ia *instanceApi) UpdateInstanceName(ur UpdateNameRequest, meta interface{}) (string, error) {
 	// Meta information

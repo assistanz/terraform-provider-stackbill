@@ -13,6 +13,7 @@ func NewInstanceUtils() InstanceUtilsI {
 type InstanceUtilsI interface {
 	GetCreateInstanceRequest(d *schema.ResourceData) CreateRequest
 	GetUpdateInstanceNameRequest(d *schema.ResourceData) UpdateNameRequest
+	GetResetSshKeyInstanceRequest(d *schema.ResourceData) ResetSshkeyRequest
 	GetResizeInstanceRequest(d *schema.ResourceData) ResizeRequest
 	GetInstanceActionRequest(d *schema.ResourceData) InstanceActionRequest
 }
@@ -45,15 +46,36 @@ func (vs *instanceUtils) GetCreateInstanceRequest(d *schema.ResourceData) Create
 func (vs *instanceUtils) GetUpdateInstanceNameRequest(d *schema.ResourceData) UpdateNameRequest {
 	var updateNameRequest UpdateNameRequest
 	updateNameRequest.Name = d.Get("name").(string)
-	updateNameRequest.Uuid = d.Id()
+	uuid := d.Id()
+	if d.Id() == "" {
+		uuid = d.Get("uuid").(string)
+	}
+	updateNameRequest.Uuid = uuid
 	return updateNameRequest
+}
+
+// Update name request
+// TODO - Documentation
+func (vs *instanceUtils) GetResetSshKeyInstanceRequest(d *schema.ResourceData) ResetSshkeyRequest {
+	var resetSshkeyRequest ResetSshkeyRequest
+	resetSshkeyRequest.SshkeyId = d.Get("ssh_key_id").(string)
+	uuid := d.Id()
+	if d.Id() == "" {
+		uuid = d.Get("uuid").(string)
+	}
+	resetSshkeyRequest.Uuid = uuid
+	return resetSshkeyRequest
 }
 
 // Resize request
 // TODO - Documentation
 func (vs *instanceUtils) GetResizeInstanceRequest(d *schema.ResourceData) ResizeRequest {
 	var resizeRequest ResizeRequest
-	resizeRequest.Uuid = d.Id()
+	uuid := d.Id()
+	if d.Id() == "" {
+		uuid = d.Get("uuid").(string)
+	}
+	resizeRequest.Uuid = uuid
 	resizeRequest.OfferingUuid = d.Get("compute_offering_uuid").(string)
 	resizeRequest.CpuCore = d.Get("cpu_core").(string)
 	resizeRequest.Memory = d.Get("memory").(string)

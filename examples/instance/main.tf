@@ -18,9 +18,30 @@ provider "stackbill" {
   secret_key = "LKdDxtfboa18le8cJDe98XWKb7Le6C5WrRNSesxasHcg9vZmjA5tS437vYl-"
 }
 
-# data "stackbill_instance_list" "all" {
+# resource "stackbill_instance_reset_sshkey" "my-server" {
+#   uuid       = "4d9150e6-64b5-451a-8851-0a4ea5142242"
+#   ssh_key_id = "cdc0d62c-9f9c-41c3-9b8e-37ecd49ef57"
+# }
+
+# resource "stackbill_iso_list" "my-server" {
 #   zone_id = "74b12720-73ce-49b6-857f-48cdac6dcd3f"
 # }
+#
+# resource "stackbill_instance_resize" "my-server" {
+#   compute_offering_uuid = "2f7b1b02-078f-42fb-aece-aa21bfa89e1a"
+#   uuid                  = "4d9150e6-64b5-451a-8851-0a4ea5142242"
+#   cpu_core              = "3"
+#   memory                = "0"
+# }
+
+data "stackbill_iso_list" "all" {
+  zone_id = "74b12720-73ce-49b6-857f-48cdac6dcd3f"
+}
+
+# Returns all coffees
+output "all_compute_offeringss" {
+  value = data.stackbill_iso_list.all.iso
+}
 
 # # Returns all coffees
 # output "all_coffees" {
@@ -28,14 +49,12 @@ provider "stackbill" {
 # }
 
 
-data "stackbill_zone_list" "all" {
-  # zone_id = "74b12720-73ce-49b6-857f-48cdac6dcd3f"
-  uuid = "705b53d6-ecb5-4082-81bb-a1877a3a0c09"
+data "stackbill_sshkey_list" "all" {
 }
 
 # Returns all coffees
 output "all_compute_offerings" {
-  value = data.stackbill_zone_list.all.zones
+  value = data.stackbill_sshkey_list.all.sshkeys
 }
 
 # output "coffee" {
