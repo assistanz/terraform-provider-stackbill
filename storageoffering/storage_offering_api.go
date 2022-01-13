@@ -6,12 +6,12 @@ import (
 )
 
 // New Storage Offering Api
-func NewStorageOfferingApi() StorageOfferingApiI {
+func NewStorageOfferingApi() StorageOfferingApi {
 	return &storageOfferingApi{}
 }
 
 // Storage Offering Api Interfae
-type StorageOfferingApiI interface {
+type StorageOfferingApi interface {
 	ListStorageOfferings(string, string, interface{}) (string, error)
 }
 
@@ -39,5 +39,5 @@ func (co *storageOfferingApi) ListStorageOfferings(zoneId string, uuid string, m
 	if err != nil {
 		return "", err
 	}
-	return string(response), nil
+	return response, nil
 }

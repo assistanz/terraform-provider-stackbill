@@ -4,6 +4,6 @@ import "terraform-provider-stackbill/http"
 
 var (
 	httpClient    http.HttpClient = http.NewHttpClient()
-	sshkeyApiObj  SshkeyApiI      = NewSshkeyApi()
-	sshkeyDataObj SshkeyDataI     = NewSshkeyData()
+	sshkeyApiObj  SshkeyApi       = NewSshkeyApi()
+	sshkeyDataObj SshkeyData      = NewSshkeyData()
 )

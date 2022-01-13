@@ -4,6 +4,6 @@ import "terraform-provider-stackbill/http"
 
 var (
 	httpClient  http.HttpClient = http.NewHttpClient()
-	zoneApiObj  ZoneApiI        = NewZoneApi()
-	zoneDataObj ZoneDataI       = NewZoneData()
+	zoneApiObj  ZoneApi         = NewZoneApi()
+	zoneDataObj ZoneData        = NewZoneData()
 )

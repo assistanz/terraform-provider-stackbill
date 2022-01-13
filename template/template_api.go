@@ -6,12 +6,12 @@ import (
 )
 
 // New Template Api
-func NewTemplateApi() TemplateApiI {
+func NewTemplateApi() TemplateApi {
 	return &templateApi{}
 }
 
 // Template api interface
-type TemplateApiI interface {
+type TemplateApi interface {
 	ListTemplates(string, string, interface{}) (string, error)
 }
 
@@ -21,12 +21,12 @@ type templateApi struct {
 
 // List Templates
 // TODO - Documentation
-func (nt *templateApi) ListTemplates(zoneId string, uuid string, meta interface{}) (string, error) {
+func (nt *templateApi) ListTemplates(zoneUuid string, uuid string, meta interface{}) (string, error) {
 	// Meta information
 	m := meta.(*auth.AuthKeys)
 	apiKey := m.ApiKey
 	secretKey := m.SecretKey
-	endPoint := api.GetNewTemplateListApi(zoneId)
+	endPoint := api.GetNewTemplateListApi(zoneUuid)
 	if uuid != "" {
 		endPoint += "&uuid=" + uuid
 	}
@@ -34,5 +34,5 @@ func (nt *templateApi) ListTemplates(zoneId string, uuid string, meta interface{
 	if err != nil {
 		return "", err
 	}
-	return string(response), nil
+	return response, nil
 }

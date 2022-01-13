@@ -5,6 +5,6 @@ var (
 )
 
 // Storage Offering List Api
-func GetStorageOfferingListApi(zoneId string) string {
-	return EndPoint + "/" + storageOfferingList + "?zoneUuid=" + zoneId
+func GetStorageOfferingListApi(zoneUuid string) string {
+	return EndPoint + "/" + storageOfferingList + "?zoneUuid=" + zoneUuid
 }

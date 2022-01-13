@@ -3,22 +3,22 @@ package zone
 import (
 	"context"
 	"encoding/json"
+	"log"
 	"strconv"
 	"terraform-provider-stackbill/utils"
 	"time"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
-	logs "github.com/sirupsen/logrus"
 )
 
 // Zone Object
-func NewZoneData() ZoneDataI {
+func NewZoneData() ZoneData {
 	return &zoneData{}
 }
 
 // Zone Interface
-type ZoneDataI interface {
+type ZoneData interface {
 	List(context.Context, *schema.ResourceData, interface{}) diag.Diagnostics
 }
 
@@ -33,12 +33,11 @@ func (z *zoneData) List(ctx context.Context, d *schema.ResourceData, meta interf
 	uuid := d.Get("uuid").(string)
 	// Warning or errors can be collected in a slice type
 	var diags diag.Diagnostics
-	logs.Info("Zone list initiated...!")
+	log.Println("Zone list initiated...!")
 	response, err := zoneApiObj.ListZones(uuid, meta)
 	if err != nil {
 		return diag.FromErr(err)
 	}
-	logs.Info(response)
 	jsonRes := make(map[string]interface{})
 	if err := json.Unmarshal([]byte(response), &jsonRes); err != nil {
 		return diag.FromErr(err)
@@ -48,7 +47,7 @@ func (z *zoneData) List(ctx context.Context, d *schema.ResourceData, meta interf
 		return diag.FromErr(err)
 	}
 	datas := jsonRes["listZoneResponse"].([]interface{})
-	output := make([]map[string]interface{}, 0)
+	list := make([]map[string]interface{}, 0)
 	for _, value := range datas {
 		v := value.(map[string]interface{})
 		i := make(map[string]interface{})
@@ -56,12 +55,12 @@ func (z *zoneData) List(ctx context.Context, d *schema.ResourceData, meta interf
 			snakeKey := utils.CamelCaseStringToSnakeCase(k)
 			i[snakeKey] = v[k]
 		}
-		output = append(output, i)
+		list = append(list, i)
 	}
-	if err := d.Set("zones", output); err != nil {
+	if err := d.Set("zones", list); err != nil {
 		return diag.FromErr(err)
 	}
-	logs.Info("List zones successful...!")
+	log.Println("List zones successful...!")
 	d.SetId(strconv.FormatInt(time.Now().Unix(), 10))
 	return diags
 }

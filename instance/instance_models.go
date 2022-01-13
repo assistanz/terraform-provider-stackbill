@@ -41,3 +41,10 @@ type InstanceActionRequest struct {
 	Uuid   string `json:"uuid" validate:"required"`
 	Action string `json:"action" validate:"required"`
 }
+
+// Iso Action Request
+type InstanceIsoActionRequest struct {
+	Uuid    string `json:"uuid" validate:"required"`
+	IsoUuid string `json:"isoUuid" validate:"required"`
+	Action  string `json:"action" validate:"required"`
+}

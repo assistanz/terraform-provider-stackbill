@@ -1,7 +1,7 @@
 package auth
 
 // New Auth Client
-func NewAuthClient() IAuthClient {
+func NewAuthClient() AuthClient {
 	return &authClient{}
 }
 
@@ -12,7 +12,7 @@ type AuthKeys struct {
 }
 
 // Auth Client
-type IAuthClient interface {
+type AuthClient interface {
 	New(*string, *string) *AuthKeys
 }
 

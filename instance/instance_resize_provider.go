@@ -7,10 +7,10 @@ import (
 func InstanceResizeProvider() *schema.Resource {
 	return &schema.Resource{
 		Description:   "Instance Resize Api's",
-		CreateContext: instanceResizeObj.Create,
-		ReadContext:   instanceResizeObj.Read,
-		UpdateContext: instanceResizeObj.Update,
-		DeleteContext: instanceResizeObj.Delete,
+		CreateContext: instanceResizeResourceObj.Create,
+		ReadContext:   instanceResizeResourceObj.Read,
+		UpdateContext: instanceResizeResourceObj.Update,
+		DeleteContext: instanceResizeResourceObj.Delete,
 		Schema: map[string]*schema.Schema{
 			"uuid": &schema.Schema{
 				Type:     schema.TypeString,

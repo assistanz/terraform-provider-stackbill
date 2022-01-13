@@ -6,23 +6,19 @@ import (
 	"terraform-provider-stackbill/auth"
 )
 
-const (
-	START = "Start"
-	STOP  = "Stop"
-)
-
 // Instance util Object
-func NewInstanceApi() InstanceApiI {
+func NewInstanceApi() InstanceApi {
 	return &instanceApi{}
 }
 
 //Instance Interfae
-type InstanceApiI interface {
+type InstanceApi interface {
 	CreateInstance(CreateRequest, interface{}) (string, error)
 	UpdateInstanceName(UpdateNameRequest, interface{}) (string, error)
 	ResetSshKey(ResetSshkeyRequest, interface{}) (string, error)
 	ResizeInstance(ResizeRequest, interface{}) (string, error)
 	InstanceActions(InstanceActionRequest, interface{}) (string, error)
+	InstanceIsoActions(InstanceIsoActionRequest, interface{}) (string, error)
 	ListInstances(string, string, interface{}) (string, error)
 	DeleteInstance(string, interface{}) (string, error)
 }
@@ -58,7 +54,7 @@ func (ia *instanceApi) ResetSshKey(rsr ResetSshkeyRequest, meta interface{}) (st
 	if err != nil {
 		return "", err
 	}
-	return string(response), nil
+	return response, nil
 }
 
 // Reset ssh key
@@ -73,7 +69,7 @@ func (ia *instanceApi) UpdateInstanceName(ur UpdateNameRequest, meta interface{}
 	if err != nil {
 		return "", err
 	}
-	return string(response), nil
+	return response, nil
 }
 
 // Resize VM
@@ -90,7 +86,7 @@ func (vs *instanceApi) ResizeInstance(r ResizeRequest, meta interface{}) (string
 	if err != nil {
 		return "", err
 	}
-	return string(response), nil
+	return response, nil
 }
 
 // Actions -  start / Stop / Restart
@@ -113,7 +109,30 @@ func (vs *instanceApi) InstanceActions(ar InstanceActionRequest, meta interface{
 	if err != nil {
 		return "", err
 	}
-	return string(response), nil
+	return response, nil
+}
+
+// Actions -  Attach / Detach
+// TODO - Documentation
+func (vs *instanceApi) InstanceIsoActions(ar InstanceIsoActionRequest, meta interface{}) (string, error) {
+	// Meta information
+	m := meta.(*auth.AuthKeys)
+	apiKey := m.ApiKey
+	secretKey := m.SecretKey
+	endPoint := ""
+	switch ar.Action {
+	case ATTACH:
+		endPoint = api.GetInstanceAttachIsoApi(ar.Uuid, ar.IsoUuid)
+	case DETACH:
+		endPoint = api.GetInstanceDetachIsoApi(ar.Uuid, ar.IsoUuid)
+	default:
+		return "", errors.New("Invalid action provided...!")
+	}
+	response, err := httpClient.Get(endPoint, apiKey, secretKey)
+	if err != nil {
+		return "", err
+	}
+	return response, nil
 }
 
 // Delete Instance
@@ -129,17 +148,17 @@ func (vs *instanceApi) DeleteInstance(uuid string, meta interface{}) (string, er
 	if err != nil {
 		return "", err
 	}
-	return string(response), nil
+	return response, nil
 }
 
 // Delete Instance
 // TODO - Documentation
-func (vs *instanceApi) ListInstances(zoneId string, uuid string, meta interface{}) (string, error) {
+func (vs *instanceApi) ListInstances(zoneUuid string, uuid string, meta interface{}) (string, error) {
 	// Meta information
 	m := meta.(*auth.AuthKeys)
 	apiKey := m.ApiKey
 	secretKey := m.SecretKey
-	endPoint := api.GetInstanceListApi(zoneId)
+	endPoint := api.GetInstanceListApi(zoneUuid)
 	if uuid != "" {
 		endPoint += "&vmUuid=" + uuid
 	}
@@ -147,5 +166,5 @@ func (vs *instanceApi) ListInstances(zoneId string, uuid string, meta interface{
 	if err != nil {
 		return "", err
 	}
-	return string(response), nil
+	return response, nil
 }

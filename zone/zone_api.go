@@ -6,12 +6,12 @@ import (
 )
 
 // New Zone Api
-func NewZoneApi() ZoneApiI {
+func NewZoneApi() ZoneApi {
 	return &zoneApi{}
 }
 
 // Zone api interface
-type ZoneApiI interface {
+type ZoneApi interface {
 	ListZones(string, interface{}) (string, error)
 }
 
@@ -34,5 +34,5 @@ func (z *zoneApi) ListZones(uuid string, meta interface{}) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	return string(response), nil
+	return response, nil
 }

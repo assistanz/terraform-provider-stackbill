@@ -8,7 +8,7 @@ func ComputeOfferingListProvider() *schema.Resource {
 	return &schema.Resource{
 		ReadContext: computeOfferingDataObj.List,
 		Schema: map[string]*schema.Schema{
-			"zone_id": &schema.Schema{
+			"zone_uuid": &schema.Schema{
 				Type:     schema.TypeString,
 				Required: true,
 			},

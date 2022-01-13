@@ -8,7 +8,7 @@ func TemplateListProvider() *schema.Resource {
 	return &schema.Resource{
 		ReadContext: templateDataObj.List,
 		Schema: map[string]*schema.Schema{
-			"zone_id": &schema.Schema{
+			"zone_uuid": &schema.Schema{
 				Type:     schema.TypeString,
 				Required: true,
 			},

@@ -2,19 +2,20 @@ package instance
 
 import (
 	"context"
+	"log"
+	"terraform-provider-stackbill/utils"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
-	logs "github.com/sirupsen/logrus"
 )
 
 // Instance Resize Object
-func NewInstanceResize() InstanceResizeI {
-	return &instanceResize{}
+func NewInstanceResizeResource() InstanceResizeResource {
+	return &instanceResizeResource{}
 }
 
 // Resize Interfae
-type InstanceResizeI interface {
+type InstanceResizeResource interface {
 	Create(context.Context, *schema.ResourceData, interface{}) diag.Diagnostics
 	Read(context.Context, *schema.ResourceData, interface{}) diag.Diagnostics
 	Update(context.Context, *schema.ResourceData, interface{}) diag.Diagnostics
@@ -22,12 +23,12 @@ type InstanceResizeI interface {
 }
 
 // Resize Object
-type instanceResize struct {
+type instanceResizeResource struct {
 }
 
 // Resize Instance
 // TODO - Documentation
-func (ir *instanceResize) Resize(ctx context.Context, d *schema.ResourceData, meta interface{}) (string, error) {
+func (ir *instanceResizeResource) Resize(ctx context.Context, d *schema.ResourceData, meta interface{}) (string, error) {
 	// Get the Requst Object
 	resizeRequest := instanceUtilsObj.GetResizeInstanceRequest(d)
 	response, err := instanceApiObj.ResizeInstance(resizeRequest, meta)
@@ -39,19 +40,19 @@ func (ir *instanceResize) Resize(ctx context.Context, d *schema.ResourceData, me
 
 // Resize Instance
 // TODO - Documentation
-func (ir *instanceResize) Create(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func (ir *instanceResizeResource) Create(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	// Get name and object
 	uuid := d.Get("uuid").(string)
 	var diags diag.Diagnostics
 	// Action
-	logs.Info("Instance resize initiated...!")
+	log.Println("Instance resize initiated...!")
 	response, err := ir.Resize(ctx, d, meta)
 	if err != nil {
-		logs.Info(err.Error())
 		return diag.FromErr(err)
 	}
-	logs.Info(response)
-	logs.Info("Instance resize successful...!")
+	output := utils.FormatJsonString(response)
+	log.Println(output)
+	log.Println("Instance resize successful...!")
 	// Update the state
 	d.SetId(uuid)
 	return diags
@@ -59,7 +60,7 @@ func (ir *instanceResize) Create(ctx context.Context, d *schema.ResourceData, me
 
 // Resize Instance
 // TODO - Documentation
-func (ir *instanceResize) Read(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func (ir *instanceResizeResource) Read(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	// Meta information
 	// m := meta.(*auth.AuthKeys)
 	// Warning or errors can be collected in a slice type
@@ -69,19 +70,19 @@ func (ir *instanceResize) Read(ctx context.Context, d *schema.ResourceData, meta
 
 // Resize Instance
 // TODO - Documentation
-func (ir *instanceResize) Update(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func (ir *instanceResizeResource) Update(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	// Get name and object
 	uuid := d.Get("uuid").(string)
 	var diags diag.Diagnostics
 	// Action
-	logs.Info("Instance resize initiated...!")
+	log.Println("Instance resize initiated...!")
 	response, err := ir.Resize(ctx, d, meta)
 	if err != nil {
-		logs.Info(err.Error())
 		return diag.FromErr(err)
 	}
-	logs.Info(response)
-	logs.Info("Instance resize successful...!")
+	output := utils.FormatJsonString(response)
+	log.Println(output)
+	log.Println("Instance resize successful...!")
 	// Update the state
 	d.SetId(uuid)
 	return diags
@@ -89,7 +90,7 @@ func (ir *instanceResize) Update(ctx context.Context, d *schema.ResourceData, me
 
 // Delete Instance
 // TODO - Documentation
-func (ir *instanceResize) Delete(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func (ir *instanceResizeResource) Delete(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	// Meta information
 	// m := meta.(*auth.AuthKeys)
 	// Reset the terraform state

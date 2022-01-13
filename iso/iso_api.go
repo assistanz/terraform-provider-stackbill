@@ -6,12 +6,12 @@ import (
 )
 
 // New Iso Api
-func NewIsoApi() IsoApiI {
+func NewIsoApi() IsoApi {
 	return &isoApi{}
 }
 
 // Iso api interface
-type IsoApiI interface {
+type IsoApi interface {
 	ListIso(string, string, interface{}) (string, error)
 }
 
@@ -21,12 +21,12 @@ type isoApi struct {
 
 // List Isos
 // TODO - Documentation
-func (nt *isoApi) ListIso(zoneId string, uuid string, meta interface{}) (string, error) {
+func (nt *isoApi) ListIso(zoneUuid string, uuid string, meta interface{}) (string, error) {
 	// Meta information
 	m := meta.(*auth.AuthKeys)
 	apiKey := m.ApiKey
 	secretKey := m.SecretKey
-	endPoint := api.GetNewTemplateListApi(zoneId)
+	endPoint := api.GetNewTemplateListApi(zoneUuid)
 	if uuid != "" {
 		endPoint += "&uuid=" + uuid
 	}

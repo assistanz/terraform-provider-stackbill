@@ -2,19 +2,20 @@ package instance
 
 import (
 	"context"
+	"log"
+	"terraform-provider-stackbill/utils"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
-	logs "github.com/sirupsen/logrus"
 )
 
-// Instance Update name Object
-func NewInstanceUpdaeName() InstanceUpdateNameI {
-	return &instanceUpdateName{}
+// Instance Resest ssh key Object
+func NewInstanceResetSshKeyResource() InstanceResetSshkeyResource {
+	return &instanceResetSshkeyResource{}
 }
 
 //Instance Interfae
-type InstanceUpdateNameI interface {
+type InstanceResetSshkeyResource interface {
 	Create(context.Context, *schema.ResourceData, interface{}) diag.Diagnostics
 	Read(context.Context, *schema.ResourceData, interface{}) diag.Diagnostics
 	Update(context.Context, *schema.ResourceData, interface{}) diag.Diagnostics
@@ -22,15 +23,15 @@ type InstanceUpdateNameI interface {
 }
 
 //Instance Request Object
-type instanceUpdateName struct {
+type instanceResetSshkeyResource struct {
 }
 
 // Create Instance
 // TODO - Documentation
-func (iu *instanceUpdateName) UpdateName(ctx context.Context, d *schema.ResourceData, meta interface{}) (string, error) {
+func (irs *instanceResetSshkeyResource) ResetSshkey(ctx context.Context, d *schema.ResourceData, meta interface{}) (string, error) {
 	// Get the Requst Object
-	updateNameRequest := instanceUtilsObj.GetUpdateInstanceNameRequest(d)
-	response, err := instanceApiObj.UpdateInstanceName(updateNameRequest, meta)
+	resetSshkeyRequest := instanceUtilsObj.GetResetSshKeyInstanceRequest(d)
+	response, err := instanceApiObj.ResetSshKey(resetSshkeyRequest, meta)
 	if err != nil {
 		return "", err
 	}
@@ -39,19 +40,19 @@ func (iu *instanceUpdateName) UpdateName(ctx context.Context, d *schema.Resource
 
 // Create Instance
 // TODO - Documentation
-func (iu *instanceUpdateName) Create(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func (irs *instanceResetSshkeyResource) Create(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	// Get name and object
 	uuid := d.Get("uuid").(string)
 	var diags diag.Diagnostics
 	// Action
-	logs.Info("Update instance name initiated...!")
-	response, err := iu.UpdateName(ctx, d, meta)
+	log.Println("Instance Reset sshkey initiated...!")
+	response, err := irs.ResetSshkey(ctx, d, meta)
 	if err != nil {
-		logs.Info(err.Error())
 		return diag.FromErr(err)
 	}
-	logs.Info(response)
-	logs.Info("Update instance name successful...!")
+	output := utils.FormatJsonString(response)
+	log.Println(output)
+	log.Println("Instance Reset sshkey successful...!")
 	// Update the state
 	d.SetId(uuid)
 	return diags
@@ -59,7 +60,7 @@ func (iu *instanceUpdateName) Create(ctx context.Context, d *schema.ResourceData
 
 // Read Instance
 // TODO - Documentation
-func (iu *instanceUpdateName) Read(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func (irs *instanceResetSshkeyResource) Read(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	// Meta information
 	// m := meta.(*auth.AuthKeys)
 	// Warning or errors can be collected in a slice type
@@ -69,19 +70,19 @@ func (iu *instanceUpdateName) Read(ctx context.Context, d *schema.ResourceData, 
 
 // Update Instance
 // TODO - Documentation
-func (iu *instanceUpdateName) Update(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func (irs *instanceResetSshkeyResource) Update(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	// Get name and object
 	uuid := d.Get("uuid").(string)
 	var diags diag.Diagnostics
 	// Action
-	logs.Info("Update instance name initiated...!")
-	response, err := iu.UpdateName(ctx, d, meta)
+	log.Println("Instance Reset sshkey initiated...!")
+	response, err := irs.ResetSshkey(ctx, d, meta)
 	if err != nil {
-		logs.Info(err.Error())
 		return diag.FromErr(err)
 	}
-	logs.Info(response)
-	logs.Info("Update instance name successful...!")
+	output := utils.FormatJsonString(response)
+	log.Println(output)
+	log.Println("Instance Reset sshkey successful...!")
 	// Update the state
 	d.SetId(uuid)
 	return diags
@@ -89,7 +90,7 @@ func (iu *instanceUpdateName) Update(ctx context.Context, d *schema.ResourceData
 
 // Delete Instance
 // TODO - Documentation
-func (iu *instanceUpdateName) Delete(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func (irs *instanceResetSshkeyResource) Delete(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	// Meta information
 	// m := meta.(*auth.AuthKeys)
 	// Reset the terraform state

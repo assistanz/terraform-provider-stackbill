@@ -6,12 +6,12 @@ import (
 )
 
 // New Sshkey Api
-func NewSshkeyApi() SshkeyApiI {
+func NewSshkeyApi() SshkeyApi {
 	return &networkApi{}
 }
 
 // Sshkey api interface
-type SshkeyApiI interface {
+type SshkeyApi interface {
 	ListSshkeys(interface{}) (string, error)
 }
 
@@ -36,5 +36,5 @@ func (nt *networkApi) ListSshkeys(meta interface{}) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	return string(response), nil
+	return response, nil
 }

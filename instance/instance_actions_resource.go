@@ -2,19 +2,20 @@ package instance
 
 import (
 	"context"
+	"log"
+	"terraform-provider-stackbill/utils"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
-	logs "github.com/sirupsen/logrus"
 )
 
-// Instance Object
-func NewInstanceActions() InstanceActionsI {
-	return &instanceActions{}
+// ACtion Resource Object
+func NewInstanceActionsResource() InstanceActionsResource {
+	return &instanceActionsResource{}
 }
 
 //Instance Interfae
-type InstanceActionsI interface {
+type InstanceActionsResource interface {
 	Create(context.Context, *schema.ResourceData, interface{}) diag.Diagnostics
 	Read(context.Context, *schema.ResourceData, interface{}) diag.Diagnostics
 	Update(context.Context, *schema.ResourceData, interface{}) diag.Diagnostics
@@ -22,27 +23,27 @@ type InstanceActionsI interface {
 }
 
 //Instance Request Object
-type instanceActions struct {
+type instanceActionsResource struct {
 }
 
 // Create Instance
 // TODO - Documentation
-func (vs *instanceActions) Create(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func (vs *instanceActionsResource) Create(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	// Get name and object
 	uuid := d.Get("uuid").(string)
 	action := d.Get("action").(string)
 	// Warning or errors can be collected in a slice type
 	var diags diag.Diagnostics
 	// Action
-	logs.Info("Instance " + action + " initiated...!")
+	log.Println("Instance " + action + " initiated...!")
 	actionRequest := instanceUtilsObj.GetInstanceActionRequest(d)
 	response, err := instanceApiObj.InstanceActions(actionRequest, meta)
 	if err != nil {
-		logs.Info(err.Error())
 		return diag.FromErr(err)
 	}
-	logs.Info(response)
-	logs.Info("Instance " + action + " completed...!")
+	output := utils.FormatJsonString(response)
+	log.Println(output)
+	log.Println("Instance " + action + " completed...!")
 	// Update the state
 	d.SetId(uuid)
 	return diags
@@ -50,7 +51,7 @@ func (vs *instanceActions) Create(ctx context.Context, d *schema.ResourceData, m
 
 // Read Instance
 // TODO - Documentation
-func (vs *instanceActions) Read(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func (vs *instanceActionsResource) Read(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	// Meta information
 	// m := meta.(*auth.AuthKeys)
 	// Warning or errors can be collected in a slice type
@@ -60,22 +61,22 @@ func (vs *instanceActions) Read(ctx context.Context, d *schema.ResourceData, met
 
 // Update Instance
 // TODO - Documentation
-func (vs *instanceActions) Update(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func (vs *instanceActionsResource) Update(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	// Get name and object
 	uuid := d.Get("uuid").(string)
 	action := d.Get("action").(string)
 	// Warning or errors can be collected in a slice type
 	var diags diag.Diagnostics
 	// Action
-	logs.Info("Instance " + action + " initiated...!")
+	log.Println("Instance " + action + " initiated...!")
 	actionRequest := instanceUtilsObj.GetInstanceActionRequest(d)
 	response, err := instanceApiObj.InstanceActions(actionRequest, meta)
 	if err != nil {
-		logs.Info(err.Error())
 		return diag.FromErr(err)
 	}
-	logs.Info(response)
-	logs.Info("Instance " + action + " completed...!")
+	output := utils.FormatJsonString(response)
+	log.Println(output)
+	log.Println("Instance " + action + " completed...!")
 	// Update the state
 	d.SetId(uuid)
 	return diags
@@ -83,7 +84,7 @@ func (vs *instanceActions) Update(ctx context.Context, d *schema.ResourceData, m
 
 // Delete Instance
 // TODO - Documentation
-func (vs *instanceActions) Delete(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func (vs *instanceActionsResource) Delete(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	// Meta information
 	// m := meta.(*auth.AuthKeys)
 	// Reset the terraform state

@@ -3,22 +3,22 @@ package storageoffering
 import (
 	"context"
 	"encoding/json"
+	"log"
 	"strconv"
 	"terraform-provider-stackbill/utils"
 	"time"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
-	logs "github.com/sirupsen/logrus"
 )
 
 // Storage Offering Object
-func NewStorageOfferingData() StorageOfferingDataI {
+func NewStorageOfferingData() StorageOfferingData {
 	return &storageOfferingData{}
 }
 
 // Storage Offering Interface
-type StorageOfferingDataI interface {
+type StorageOfferingData interface {
 	List(context.Context, *schema.ResourceData, interface{}) diag.Diagnostics
 }
 
@@ -31,14 +31,13 @@ type storageOfferingData struct {
 func (so *storageOfferingData) List(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	// Warning or errors can be collected in a slice type
 	var diags diag.Diagnostics
-	zoneId := d.Get("zone_id").(string)
+	zoneUuid := d.Get("zone_uuid").(string)
 	uuid := d.Get("uuid").(string)
-	logs.Info("Storage Offering list initiated...!")
-	response, err := storageOfferingApiObj.ListStorageOfferings(zoneId, uuid, meta)
+	log.Println("Storage Offering list initiated...!")
+	response, err := storageOfferingApiObj.ListStorageOfferings(zoneUuid, uuid, meta)
 	if err != nil {
 		return diag.FromErr(err)
 	}
-	logs.Info(response)
 	jsonRes := make(map[string]interface{}, 0)
 	if err := json.Unmarshal([]byte(response), &jsonRes); err != nil {
 		return diag.FromErr(err)
@@ -61,7 +60,7 @@ func (so *storageOfferingData) List(ctx context.Context, d *schema.ResourceData,
 	if err := d.Set("storageofferings", output); err != nil {
 		return diag.FromErr(err)
 	}
-	logs.Info("List storage offerings successful...!")
+	log.Println("List storage offerings successful...!")
 	d.SetId(strconv.FormatInt(time.Now().Unix(), 10))
 	return diags
 }

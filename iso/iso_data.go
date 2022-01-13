@@ -3,22 +3,22 @@ package iso
 import (
 	"context"
 	"encoding/json"
+	"log"
 	"strconv"
 	"terraform-provider-stackbill/utils"
 	"time"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
-	logs "github.com/sirupsen/logrus"
 )
 
 // Template Object
-func NewIsoData() IsoDataI {
+func NewIsoData() IsoData {
 	return &isoData{}
 }
 
 // Template Interface
-type IsoDataI interface {
+type IsoData interface {
 	List(context.Context, *schema.ResourceData, interface{}) diag.Diagnostics
 }
 
@@ -31,14 +31,13 @@ type isoData struct {
 func (co *isoData) List(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	// Warning or errors can be collected in a slice type
 	var diags diag.Diagnostics
-	zoneId := d.Get("zone_id").(string)
+	zoneUuid := d.Get("zone_uuid").(string)
 	uuid := d.Get("uuid").(string)
-	logs.Info("Iso list initiated...!")
-	response, err := isoApiObj.ListIso(zoneId, uuid, meta)
+	log.Println("Iso list initiated...!")
+	response, err := isoApiObj.ListIso(zoneUuid, uuid, meta)
 	if err != nil {
 		return diag.FromErr(err)
 	}
-	logs.Info(response)
 	jsonRes := make(map[string]interface{})
 	if err := json.Unmarshal([]byte(response), &jsonRes); err != nil {
 		return diag.FromErr(err)
@@ -48,7 +47,7 @@ func (co *isoData) List(ctx context.Context, d *schema.ResourceData, meta interf
 		return diag.FromErr(err)
 	}
 	datas := jsonRes["listTemplateResponse"].([]interface{})
-	output := make([]map[string]interface{}, 0)
+	list := make([]map[string]interface{}, 0)
 	for _, value := range datas {
 		v := value.(map[string]interface{})
 		i := make(map[string]interface{})
@@ -60,12 +59,12 @@ func (co *isoData) List(ctx context.Context, d *schema.ResourceData, meta interf
 			snakeKey := utils.CamelCaseStringToSnakeCase(k)
 			i[snakeKey] = v[k]
 		}
-		output = append(output, i)
+		list = append(list, i)
 	}
-	if err := d.Set("iso", output); err != nil {
+	if err := d.Set("iso", list); err != nil {
 		return diag.FromErr(err)
 	}
-	logs.Info("Iso list successful...!")
+	log.Println("Iso list successful...!")
 	d.SetId(strconv.FormatInt(time.Now().Unix(), 10))
 	return diags
 }

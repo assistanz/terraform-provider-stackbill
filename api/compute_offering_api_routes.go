@@ -5,6 +5,6 @@ var (
 )
 
 // Compute Offering List Api
-func GetComputeOfferingListApi(zoneId string) string {
-	return EndPoint + "/" + computeOfferingList + "?zoneUuid=" + zoneId
+func GetComputeOfferingListApi(zoneUuid string) string {
+	return EndPoint + "/" + computeOfferingList + "?zoneUuid=" + zoneUuid
 }

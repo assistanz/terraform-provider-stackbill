@@ -5,6 +5,6 @@ var (
 )
 
 // Template List api
-func GetNewTemplateListApi(zoneId string) string {
-	return EndPoint + "/" + templateList + "?zoneUuid=" + zoneId
+func GetNewTemplateListApi(zoneUuid string) string {
+	return EndPoint + "/" + templateList + "?zoneUuid=" + zoneUuid
 }

@@ -3,22 +3,22 @@ package instance
 import (
 	"context"
 	"encoding/json"
+	"log"
 	"strconv"
 	"terraform-provider-stackbill/utils"
 	"time"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
-	logs "github.com/sirupsen/logrus"
 )
 
 // Instance Object
-func NewInstanceData() InstanceDataI {
+func NewInstanceData() InstanceData {
 	return &instanceData{}
 }
 
 //Instance Interfae
-type InstanceDataI interface {
+type InstanceData interface {
 	List(context.Context, *schema.ResourceData, interface{}) diag.Diagnostics
 }
 
@@ -31,14 +31,13 @@ type instanceData struct {
 func (id *instanceData) List(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	// Warning or errors can be collected in a slice type
 	var diags diag.Diagnostics
-	zoneId := d.Get("zone_id").(string)
+	zoneUuid := d.Get("zone_uuid").(string)
 	uuid := d.Get("uuid").(string)
-	logs.Info("Instance list initiated...!")
-	response, err := instanceApiObj.ListInstances(zoneId, uuid, meta)
+	log.Println("Instance list initiated...!")
+	response, err := instanceApiObj.ListInstances(zoneUuid, uuid, meta)
 	if err != nil {
 		return diag.FromErr(err)
 	}
-	logs.Info(response)
 	jsonRes := make(map[string]interface{})
 	if err := json.Unmarshal([]byte(response), &jsonRes); err != nil {
 		return diag.FromErr(err)
@@ -48,7 +47,7 @@ func (id *instanceData) List(ctx context.Context, d *schema.ResourceData, meta i
 		return diag.FromErr(err)
 	}
 	datas := jsonRes["listInstanceResponse"].([]interface{})
-	output := make([]map[string]interface{}, 0)
+	list := make([]map[string]interface{}, 0)
 	for _, value := range datas {
 		v := value.(map[string]interface{})
 		i := make(map[string]interface{})
@@ -56,12 +55,12 @@ func (id *instanceData) List(ctx context.Context, d *schema.ResourceData, meta i
 			snakeKey := utils.CamelCaseStringToSnakeCase(k)
 			i[snakeKey] = v[k]
 		}
-		output = append(output, i)
+		list = append(list, i)
 	}
-	if err := d.Set("instances", output); err != nil {
+	if err := d.Set("instances", list); err != nil {
 		return diag.FromErr(err)
 	}
-	logs.Info("List instances successful...!")
+	log.Println("List instances successful...!")
 	d.SetId(strconv.FormatInt(time.Now().Unix(), 10))
 	return diags
 }

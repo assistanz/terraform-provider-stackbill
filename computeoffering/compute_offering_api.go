@@ -6,12 +6,12 @@ import (
 )
 
 // New Compute Offering Api
-func NewComputeOfferingApi() ComputeOfferingApiI {
+func NewComputeOfferingApi() ComputeOfferingApi {
 	return &computeOfferingApi{}
 }
 
 // Compute Offering Api Interface
-type ComputeOfferingApiI interface {
+type ComputeOfferingApi interface {
 	ListComputeOfferings(string, string, interface{}) (string, error)
 }
 
@@ -26,12 +26,12 @@ type computeOfferingApi struct {
 It will be generated autmatically By terraform
 @Return Response / Error
 */
-func (co *computeOfferingApi) ListComputeOfferings(zoneId string, uuid string, meta interface{}) (string, error) {
+func (co *computeOfferingApi) ListComputeOfferings(zoneUuid string, uuid string, meta interface{}) (string, error) {
 	// Meta information
 	m := meta.(*auth.AuthKeys)
 	apiKey := m.ApiKey
 	secretKey := m.SecretKey
-	endPoint := api.GetComputeOfferingListApi(zoneId)
+	endPoint := api.GetComputeOfferingListApi(zoneUuid)
 	if uuid != "" {
 		endPoint += "&uuid=" + uuid
 	}
@@ -39,5 +39,5 @@ func (co *computeOfferingApi) ListComputeOfferings(zoneId string, uuid string, m
 	if err != nil {
 		return "", err
 	}
-	return string(response), nil
+	return response, nil
 }

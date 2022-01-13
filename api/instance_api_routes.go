@@ -8,6 +8,8 @@ var (
 	instanceDelete        = "instance/destroyInstance"
 	instanceResize        = "instance/resizeVm"
 	instanceList          = "instance/instanceList"
+	instanceAttachIso     = "instance/attachIso"
+	instanceDetachIso     = "instance/detachIso"
 )
 
 // Instance create api
@@ -43,4 +45,14 @@ func GetInstanceResizeApi() string {
 // Instance List api
 func GetInstanceListApi(zoneId string) string {
 	return EndPoint + "/" + instanceList + "?zoneUuid=" + zoneId
+}
+
+// Instace Attach Iso
+func GetInstanceAttachIsoApi(uuid string, isoUUid string) string {
+	return EndPoint + "/" + instanceAttachIso + "?uuid=" + uuid + "&isoUuid=" + isoUUid
+}
+
+// Instace Detach Iso
+func GetInstanceDetachIsoApi(uuid string, isoUUid string) string {
+	return EndPoint + "/" + instanceDetachIso + "?uuid=" + uuid + "&isoUuid=" + isoUUid
 }

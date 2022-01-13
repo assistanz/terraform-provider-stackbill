@@ -3,22 +3,22 @@ package template
 import (
 	"context"
 	"encoding/json"
+	"log"
 	"strconv"
 	"terraform-provider-stackbill/utils"
 	"time"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
-	logs "github.com/sirupsen/logrus"
 )
 
 // Template Object
-func NewTemplateData() TemplateDataI {
+func NewTemplateData() TemplateData {
 	return &templateData{}
 }
 
 // Template Interface
-type TemplateDataI interface {
+type TemplateData interface {
 	List(context.Context, *schema.ResourceData, interface{}) diag.Diagnostics
 }
 
@@ -31,14 +31,13 @@ type templateData struct {
 func (co *templateData) List(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	// Warning or errors can be collected in a slice type
 	var diags diag.Diagnostics
-	zoneId := d.Get("zone_id").(string)
+	zoneUuid := d.Get("zone_uuid").(string)
 	uuid := d.Get("uuid").(string)
-	logs.Info("Template list initiated...!")
-	response, err := templateApiObj.ListTemplates(zoneId, uuid, meta)
+	log.Println("Template list initiated...!")
+	response, err := templateApiObj.ListTemplates(zoneUuid, uuid, meta)
 	if err != nil {
 		return diag.FromErr(err)
 	}
-	logs.Info(response)
 	jsonRes := make(map[string]interface{})
 	if err := json.Unmarshal([]byte(response), &jsonRes); err != nil {
 		return diag.FromErr(err)
@@ -61,7 +60,7 @@ func (co *templateData) List(ctx context.Context, d *schema.ResourceData, meta i
 	if err := d.Set("templates", output); err != nil {
 		return diag.FromErr(err)
 	}
-	logs.Info("List Templates successful...!")
+	log.Println("List Templates successful...!")
 	d.SetId(strconv.FormatInt(time.Now().Unix(), 10))
 	return diags
 }

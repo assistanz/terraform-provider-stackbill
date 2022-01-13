@@ -4,6 +4,6 @@ import "terraform-provider-stackbill/http"
 
 var (
 	httpClient      http.HttpClient = http.NewHttpClient()
-	templateApiObj  TemplateApiI    = NewTemplateApi()
-	templateDataObj TemplateDataI   = NewTemplateData()
+	templateApiObj  TemplateApi     = NewTemplateApi()
+	templateDataObj TemplateData    = NewTemplateData()
 )

@@ -3,22 +3,22 @@ package network
 import (
 	"context"
 	"encoding/json"
+	"log"
 	"strconv"
 	"terraform-provider-stackbill/utils"
 	"time"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
-	logs "github.com/sirupsen/logrus"
 )
 
 // Network Object
-func NewNetworkData() NetworkDataI {
+func NewNetworkData() NetworkData {
 	return &networkData{}
 }
 
 // Network interface
-type NetworkDataI interface {
+type NetworkData interface {
 	List(context.Context, *schema.ResourceData, interface{}) diag.Diagnostics
 }
 
@@ -31,14 +31,13 @@ type networkData struct {
 func (co *networkData) List(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	// Warning or errors can be collected in a slice type
 	var diags diag.Diagnostics
-	zoneId := d.Get("zone_id").(string)
+	zoneUuid := d.Get("zone_uuid").(string)
 	uuid := d.Get("uuid").(string)
-	logs.Info("Network list initiated...!")
-	response, err := networkApiObj.ListNetworks(zoneId, uuid, meta)
+	log.Println("Network list initiated...!")
+	response, err := networkApiObj.ListNetworks(zoneUuid, uuid, meta)
 	if err != nil {
 		return diag.FromErr(err)
 	}
-	logs.Info(response)
 	jsonRes := make(map[string]interface{})
 	if err := json.Unmarshal([]byte(response), &jsonRes); err != nil {
 		return diag.FromErr(err)
@@ -48,7 +47,7 @@ func (co *networkData) List(ctx context.Context, d *schema.ResourceData, meta in
 		return diag.FromErr(err)
 	}
 	datas := jsonRes["listNetworkResponse"].([]interface{})
-	output := make([]map[string]interface{}, 0)
+	list := make([]map[string]interface{}, 0)
 	for _, value := range datas {
 		v := value.(map[string]interface{})
 		i := make(map[string]interface{})
@@ -60,12 +59,12 @@ func (co *networkData) List(ctx context.Context, d *schema.ResourceData, meta in
 			}
 			i[snakeKey] = v[k]
 		}
-		output = append(output, i)
+		list = append(list, i)
 	}
-	if err := d.Set("networks", output); err != nil {
+	if err := d.Set("networks", list); err != nil {
 		return diag.FromErr(err)
 	}
-	logs.Info("List networks successful...!")
+	log.Println("List networks successful...!")
 	d.SetId(strconv.FormatInt(time.Now().Unix(), 10))
 	return diags
 }

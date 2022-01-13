@@ -5,17 +5,18 @@ import (
 )
 
 // Instance util Object
-func NewInstanceUtils() InstanceUtilsI {
+func NewInstanceUtils() InstanceUtils {
 	return &instanceUtils{}
 }
 
 //Instance Interfae
-type InstanceUtilsI interface {
+type InstanceUtils interface {
 	GetCreateInstanceRequest(d *schema.ResourceData) CreateRequest
 	GetUpdateInstanceNameRequest(d *schema.ResourceData) UpdateNameRequest
 	GetResetSshKeyInstanceRequest(d *schema.ResourceData) ResetSshkeyRequest
 	GetResizeInstanceRequest(d *schema.ResourceData) ResizeRequest
 	GetInstanceActionRequest(d *schema.ResourceData) InstanceActionRequest
+	GetInstanceIsoActionRequest(d *schema.ResourceData) InstanceIsoActionRequest
 }
 
 //Instance utils Object
@@ -58,7 +59,7 @@ func (vs *instanceUtils) GetUpdateInstanceNameRequest(d *schema.ResourceData) Up
 // TODO - Documentation
 func (vs *instanceUtils) GetResetSshKeyInstanceRequest(d *schema.ResourceData) ResetSshkeyRequest {
 	var resetSshkeyRequest ResetSshkeyRequest
-	resetSshkeyRequest.SshkeyId = d.Get("ssh_key_id").(string)
+	resetSshkeyRequest.SshkeyId = d.Get("ssh_key_uuid").(string)
 	uuid := d.Id()
 	if d.Id() == "" {
 		uuid = d.Get("uuid").(string)
@@ -89,4 +90,18 @@ func (vs *instanceUtils) GetInstanceActionRequest(d *schema.ResourceData) Instan
 	instanceActionRequest.Uuid = d.Id()
 	instanceActionRequest.Action = d.Get("action").(string)
 	return instanceActionRequest
+}
+
+// Action request
+// TODO - Documentation
+func (vs *instanceUtils) GetInstanceIsoActionRequest(d *schema.ResourceData) InstanceIsoActionRequest {
+	var instanceIsoActionRequest InstanceIsoActionRequest
+	uuid := d.Id()
+	if d.Id() == "" {
+		uuid = d.Get("uuid").(string)
+	}
+	instanceIsoActionRequest.Uuid = uuid
+	instanceIsoActionRequest.IsoUuid = d.Get("iso_uuid").(string)
+	instanceIsoActionRequest.Action = d.Get("action").(string)
+	return instanceIsoActionRequest
 }
