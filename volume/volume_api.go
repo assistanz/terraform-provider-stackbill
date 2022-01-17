@@ -14,8 +14,9 @@ func NewVolumeApi() VolumeApi {
 // Volume api interface
 type VolumeApi interface {
 	ListVolumes(string, string, interface{}) (string, error)
-	VolumeActions(VolumeActionRequest, interface{}) (string, error)
-	CreateVolume(VolumeCreateRequest, interface{}) (string, error)
+	VolumeActions(map[string]interface{}, interface{}) (string, error)
+	CreateVolume(map[string]interface{}, interface{}) (string, error)
+	DeleteVolume(string, interface{}) (string, error)
 }
 
 // Volume api object
@@ -42,17 +43,17 @@ func (v *volumeApi) ListVolumes(zoneUuid string, uuid string, meta interface{}) 
 
 // Actions -  start / Stop / Restart
 // TODO - Documentation
-func (v *volumeApi) VolumeActions(vr VolumeActionRequest, meta interface{}) (string, error) {
+func (v *volumeApi) VolumeActions(vr map[string]interface{}, meta interface{}) (string, error) {
 	// Meta information
 	m := meta.(*auth.AuthKeys)
 	apiKey := m.ApiKey
 	secretKey := m.SecretKey
 	endPoint := ""
-	switch vr.Action {
+	switch vr["action"].(string) {
 	case ATTACH:
-		endPoint = api.GetVolumeAttachApi(vr.Uuid) + "&instanceUuid=" + vr.InstanceUuid
+		endPoint = api.GetVolumeAttachApi(vr["uuid"].(string)) + "&instanceUuid=" + vr["instanceUuid"].(string)
 	case DETACH:
-		endPoint = api.GetVolumeDetachApi(vr.Uuid)
+		endPoint = api.GetVolumeDetachApi(vr["uuid"].(string))
 	default:
 		return "", errors.New("Invalid action provided...!")
 	}
@@ -65,13 +66,28 @@ func (v *volumeApi) VolumeActions(vr VolumeActionRequest, meta interface{}) (str
 
 // List Zones
 // TODO - Documentation
-func (v *volumeApi) CreateVolume(vc VolumeCreateRequest, meta interface{}) (string, error) {
+func (v *volumeApi) CreateVolume(vc map[string]interface{}, meta interface{}) (string, error) {
 	// Meta information
 	m := meta.(*auth.AuthKeys)
 	apiKey := m.ApiKey
 	secretKey := m.SecretKey
 	endPoint := api.GetVolumeCreateApi()
 	response, err := httpClient.PostJson(endPoint, apiKey, secretKey, vc)
+	if err != nil {
+		return "", err
+	}
+	return response, nil
+}
+
+// Delete Volume
+// TODO - Documentation
+func (v *volumeApi) DeleteVolume(uuid string, meta interface{}) (string, error) {
+	// Meta information
+	m := meta.(*auth.AuthKeys)
+	apiKey := m.ApiKey
+	secretKey := m.SecretKey
+	endPoint := api.GetVolumeDeleteApi(uuid)
+	response, err := httpClient.Delete(endPoint, apiKey, secretKey)
 	if err != nil {
 		return "", err
 	}

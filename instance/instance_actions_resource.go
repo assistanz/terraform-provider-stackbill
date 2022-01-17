@@ -85,11 +85,19 @@ func (vs *instanceActionsResource) Update(ctx context.Context, d *schema.Resourc
 // Delete Instance
 // TODO - Documentation
 func (vs *instanceActionsResource) Delete(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	// Meta information
-	// m := meta.(*auth.AuthKeys)
-	// Reset the terraform state
-	d.SetId("")
 	// Warning or errors can be collected in a slice type
 	var diags diag.Diagnostics
+	// log.Println("Instance action detach initiated...!")
+	// actionRequest := instanceUtilsObj.GetInstanceActionRequest(d)
+	// actionRequest.Action = STOP
+	// response, err := instanceApiObj.InstanceActions(actionRequest, meta)
+	// if err != nil {
+	// 	return diag.FromErr(err)
+	// }
+	// output := utils.FormatJsonString(response)
+	// log.Println(output)
+	// log.Println("Instance action detach completed...!")
+	// // Update the state
+	d.SetId("")
 	return diags
 }

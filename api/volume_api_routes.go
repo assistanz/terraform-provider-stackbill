@@ -5,6 +5,7 @@ var (
 	attachVolume = "volume/attachVolume"
 	detachVolume = "volume/detachVolume"
 	createVolume = "volume/createVolume"
+	deleteVolume = "volume/deleteVolume"
 )
 
 // Volume List api
@@ -25,4 +26,9 @@ func GetVolumeDetachApi(uuid string) string {
 // Volume Create api
 func GetVolumeCreateApi() string {
 	return EndPoint + "/" + createVolume
+}
+
+// Volume Delete api
+func GetVolumeDeleteApi(uuid string) string {
+	return EndPoint + "/" + deleteVolume + "/" + uuid
 }

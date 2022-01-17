@@ -12,7 +12,7 @@ func NewVmSnapshotApi() VmSnapshotApi {
 
 // Vm Snapshot Interfae
 type VmSnapshotApi interface {
-	SnapshotVm(VmSnapshotRequest, interface{}) (string, error)
+	SnapshotVm(map[string]interface{}, interface{}) (string, error)
 	ListVmSnapshots(string, string, interface{}) (string, error)
 	DeleteVmSnapshot(string, interface{}) (string, error)
 }
@@ -23,7 +23,7 @@ type vmSnapshotApi struct {
 
 // Update Instance Name
 // TODO - Documentation
-func (vs *vmSnapshotApi) SnapshotVm(vr VmSnapshotRequest, meta interface{}) (string, error) {
+func (vs *vmSnapshotApi) SnapshotVm(vr map[string]interface{}, meta interface{}) (string, error) {
 	// Meta information
 	m := meta.(*auth.AuthKeys)
 	apiKey := m.ApiKey

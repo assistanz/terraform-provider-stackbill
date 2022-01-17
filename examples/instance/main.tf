@@ -1,21 +1,7 @@
 # This is required for Terraform 0.13+
-terraform {
-  required_providers {
-    stackbill = {
-      version = "~> 1.0.0"
-      source  = "stackbill.com/assistanz/stackbill"
-    }
-  }
-}
-
 variable "coffee_name" {
   type    = string
   default = "Vagrante espresso"
-}
-
-provider "stackbill" {
-  api_key    = "EFq1o38cXDDq9mn850t-pDXuLq33ahwBFWcsgPFK9mTADA-HROCsfsIhjOuL"
-  secret_key = "LKdDxtfboa18le8cJDe98XWKb7Le6C5WrRNSesxasHcg9vZmjA5tS437vYl-"
 }
 
 # resource "stackbill_instance_reset_sshkey" "my-server" {
@@ -41,11 +27,11 @@ provider "stackbill" {
 #   virtual_machine_uuid = "4d9150e6-64b5-451a-8851-0a4ea5142242"
 #   zone_uuid                = "74b12720-73ce-49b6-857f-48cdac6dcd3f"
 # }
-resource "stackbill_network_attach" "my-server" {
-  network_uuid              = "80934451-21e7-4bb3-be39-30a8d14db2ac"
-  virutal_machine_uuid = "4d9150e6-64b5-451a-8851-0a4ea5142242"
-  action = "Add"
-}
+# resource "stackbill_network_attach" "my-server" {
+#   network_uuid              = "80934451-21e7-4bb3-be39-30a8d14db2ac"
+#   virutal_machine_uuid = "4d9150e6-64b5-451a-8851-0a4ea5142242"
+#   action = "Add"
+# }
 
 # data "stackbill_security_group_list" "all" {
 #   # zone_uuid = "74b12720-73ce-49b6-857f-48cdac6dcd3f"

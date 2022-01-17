@@ -12,8 +12,8 @@ func NewNetworkUtils() NetworkUtils {
 //	Network Interface
 type NetworkUtils interface {
 	GetCreateNetworkRequest(d *schema.ResourceData) map[string]interface{}
-	GetCreateNetworkOptionalRequest(d *schema.ResourceData) CreateNetworkRequestOptional
-	GetNetworkActionRequest(d *schema.ResourceData) NetworkActionRequest
+	GetCreateNetworkOptionalRequest(d *schema.ResourceData) map[string]interface{}
+	GetNetworkActionRequest(d *schema.ResourceData) map[string]interface{}
 }
 
 // Network utils Object
@@ -35,18 +35,18 @@ func (nt *networkUtils) GetCreateNetworkRequest(d *schema.ResourceData) map[stri
 
 // Snapshot Request
 // TODO - Documentation
-func (nt *networkUtils) GetCreateNetworkOptionalRequest(d *schema.ResourceData) CreateNetworkRequestOptional {
-	var createNetworkRequestOptional CreateNetworkRequestOptional
-	createNetworkRequestOptional.IsPublic = d.Get("is_public").(bool)
-	createNetworkRequestOptional.SecurityGroupId = d.Get("security_group_id").(string)
-	return createNetworkRequestOptional
+func (nt *networkUtils) GetCreateNetworkOptionalRequest(d *schema.ResourceData) map[string]interface{} {
+	request := make(map[string]interface{})
+	request["isPublic"] = d.Get("is_public").(bool)
+	request["networkOfferingUuid"] = d.Get("security_group_id").(bool)
+	return request
 }
 
 // Action Request
 // TODO - Documentation
-func (nt *networkUtils) GetNetworkActionRequest(d *schema.ResourceData) NetworkActionRequest {
-	var actionNetworkRequest NetworkActionRequest
-	actionNetworkRequest.NetworkUuid = d.Get("network_uuid").(string)
-	actionNetworkRequest.Uuid = d.Get("virutal_machine_uuid").(string)
-	return actionNetworkRequest
+func (nt *networkUtils) GetNetworkActionRequest(d *schema.ResourceData) map[string]interface{} {
+	request := make(map[string]interface{})
+	request["networkUuid"] = d.Get("network_uuid").(bool)
+	request["uuid"] = d.Get("virutal_machine_uuid").(bool)
+	return request
 }

@@ -11,12 +11,12 @@ func NewInstanceUtils() InstanceUtils {
 
 //Instance Interfae
 type InstanceUtils interface {
-	GetCreateInstanceRequest(d *schema.ResourceData) CreateRequest
-	GetUpdateInstanceNameRequest(d *schema.ResourceData) UpdateNameRequest
-	GetResetSshKeyInstanceRequest(d *schema.ResourceData) ResetSshkeyRequest
-	GetResizeInstanceRequest(d *schema.ResourceData) ResizeRequest
-	GetInstanceActionRequest(d *schema.ResourceData) InstanceActionRequest
-	GetInstanceIsoActionRequest(d *schema.ResourceData) InstanceIsoActionRequest
+	GetCreateInstanceRequest(d *schema.ResourceData) map[string]interface{}
+	GetUpdateInstanceNameRequest(d *schema.ResourceData) map[string]interface{}
+	GetResetSshKeyInstanceRequest(d *schema.ResourceData) map[string]interface{}
+	GetResizeInstanceRequest(d *schema.ResourceData) map[string]interface{}
+	GetInstanceActionRequest(d *schema.ResourceData) map[string]interface{}
+	GetInstanceIsoActionRequest(d *schema.ResourceData) map[string]interface{}
 }
 
 //Instance utils Object
@@ -25,83 +25,101 @@ type instanceUtils struct {
 
 // Create Instance
 // TODO - Documentation
-func (vs *instanceUtils) GetCreateInstanceRequest(d *schema.ResourceData) CreateRequest {
-	var createRequest CreateRequest
-	createRequest.ComputeOfferingUuid = d.Get("compute_offering_uuid").(string)
-	createRequest.CpuCore = d.Get("cpu_core").(string)
-	createRequest.DiskSize = d.Get("disk_size").(int)
-	createRequest.HypervisorName = d.Get("hypervisor_name").(string)
-	createRequest.Memory = d.Get("memory").(string)
-	createRequest.Name = d.Get("name").(string)
-	createRequest.NetworkUuid = d.Get("network_uuid").(string)
-	createRequest.SecuritygroupName = d.Get("security_group_name").(string)
-	createRequest.SshKeyName = d.Get("ssh_key_name").(string)
-	createRequest.StorageOfferingUuid = d.Get("storage_offering_uuid").(string)
-	createRequest.TemplateUuid = d.Get("template_uuid").(string)
-	createRequest.ZoneUuid = d.Get("zone_uuid").(string)
-	return createRequest
+func (vs *instanceUtils) GetCreateInstanceRequest(d *schema.ResourceData) map[string]interface{} {
+	request := make(map[string]interface{})
+	request["computeOfferingUuid"] = d.Get("compute_offering_uuid").(string)
+	if d.Get("cpu_core").(string) != "" {
+		request["cpuCore"] = d.Get("cpu_core").(string)
+	}
+	if d.Get("disk_size").(int) >= 0 {
+		request["diskSize"] = d.Get("disk_size").(int)
+	}
+	if d.Get("hypervisor_name").(string) != "" {
+		request["hypervisorName"] = d.Get("hypervisor_name").(string)
+	}
+	if d.Get("memory").(string) != "" {
+		request["memory"] = d.Get("memory").(string)
+	}
+	request["name"] = d.Get("name").(string)
+	request["networkUuid"] = d.Get("network_uuid").(string)
+	if d.Get("security_group_name").(string) != "" {
+		request["securitygroupName"] = d.Get("security_group_name").(string)
+	}
+	if d.Get("ssh_key_name").(string) != "" {
+		request["sshKeyName"] = d.Get("ssh_key_name").(string)
+	}
+	if d.Get("storage_offering_uuid").(string) != "" {
+		request["storageOfferingUuid"] = d.Get("storage_offering_uuid").(string)
+	}
+	request["templateUuid"] = d.Get("template_uuid").(string)
+	request["zoneUuid"] = d.Get("zone_uuid").(string)
+	return request
 }
 
 // Update name request
 // TODO - Documentation
-func (vs *instanceUtils) GetUpdateInstanceNameRequest(d *schema.ResourceData) UpdateNameRequest {
-	var updateNameRequest UpdateNameRequest
-	updateNameRequest.Name = d.Get("name").(string)
+func (vs *instanceUtils) GetUpdateInstanceNameRequest(d *schema.ResourceData) map[string]interface{} {
+	request := make(map[string]interface{})
+	request["displayName"] = d.Get("name").(string)
 	uuid := d.Id()
 	if d.Id() == "" {
 		uuid = d.Get("uuid").(string)
 	}
-	updateNameRequest.Uuid = uuid
-	return updateNameRequest
+	request["uuid"] = uuid
+	return request
 }
 
 // Update name request
 // TODO - Documentation
-func (vs *instanceUtils) GetResetSshKeyInstanceRequest(d *schema.ResourceData) ResetSshkeyRequest {
-	var resetSshkeyRequest ResetSshkeyRequest
-	resetSshkeyRequest.SshkeyId = d.Get("ssh_key_uuid").(string)
+func (vs *instanceUtils) GetResetSshKeyInstanceRequest(d *schema.ResourceData) map[string]interface{} {
+	request := make(map[string]interface{})
+	request["sshKeyId"] = d.Get("ssh_key_uuid").(string)
 	uuid := d.Id()
 	if d.Id() == "" {
 		uuid = d.Get("uuid").(string)
 	}
-	resetSshkeyRequest.Uuid = uuid
-	return resetSshkeyRequest
+	request["uuid"] = uuid
+	return request
 }
 
 // Resize request
 // TODO - Documentation
-func (vs *instanceUtils) GetResizeInstanceRequest(d *schema.ResourceData) ResizeRequest {
-	var resizeRequest ResizeRequest
+func (vs *instanceUtils) GetResizeInstanceRequest(d *schema.ResourceData) map[string]interface{} {
+	request := make(map[string]interface{})
+	request["offeringUuid"] = d.Get("compute_offering_uuid").(string)
+	request["cpuCore"] = d.Get("cpu_core").(string)
+	request["memory"] = d.Get("memory").(string)
 	uuid := d.Id()
 	if d.Id() == "" {
 		uuid = d.Get("uuid").(string)
 	}
-	resizeRequest.Uuid = uuid
-	resizeRequest.OfferingUuid = d.Get("compute_offering_uuid").(string)
-	resizeRequest.CpuCore = d.Get("cpu_core").(string)
-	resizeRequest.Memory = d.Get("memory").(string)
-	return resizeRequest
+	request["uuid"] = uuid
+	return request
 }
 
 // Action request
 // TODO - Documentation
-func (vs *instanceUtils) GetInstanceActionRequest(d *schema.ResourceData) InstanceActionRequest {
-	var instanceActionRequest InstanceActionRequest
-	instanceActionRequest.Uuid = d.Id()
-	instanceActionRequest.Action = d.Get("action").(string)
-	return instanceActionRequest
-}
-
-// Action request
-// TODO - Documentation
-func (vs *instanceUtils) GetInstanceIsoActionRequest(d *schema.ResourceData) InstanceIsoActionRequest {
-	var instanceIsoActionRequest InstanceIsoActionRequest
+func (vs *instanceUtils) GetInstanceActionRequest(d *schema.ResourceData) map[string]interface{} {
+	request := make(map[string]interface{})
+	request["action"] = d.Get("action").(string)
 	uuid := d.Id()
 	if d.Id() == "" {
 		uuid = d.Get("uuid").(string)
 	}
-	instanceIsoActionRequest.Uuid = uuid
-	instanceIsoActionRequest.IsoUuid = d.Get("iso_uuid").(string)
-	instanceIsoActionRequest.Action = d.Get("action").(string)
-	return instanceIsoActionRequest
+	request["uuid"] = uuid
+	return request
+}
+
+// Action request
+// TODO - Documentation
+func (vs *instanceUtils) GetInstanceIsoActionRequest(d *schema.ResourceData) map[string]interface{} {
+	request := make(map[string]interface{})
+	request["isoUuid"] = d.Get("iso_uuid").(string)
+	request["action"] = d.Get("action").(string)
+	uuid := d.Id()
+	if d.Id() == "" {
+		uuid = d.Get("uuid").(string)
+	}
+	request["uuid"] = uuid
+	return request
 }

@@ -9,8 +9,8 @@ func NewVolumeUtils() VolumeUtils {
 
 // Volume Interfae
 type VolumeUtils interface {
-	GetVolumeActionRequest(d *schema.ResourceData) VolumeActionRequest
-	GetVolumeCreateRequest(d *schema.ResourceData) VolumeCreateRequest
+	GetVolumeActionRequest(d *schema.ResourceData) map[string]interface{}
+	GetVolumeCreateRequest(d *schema.ResourceData) map[string]interface{}
 }
 
 // Volume utils Object
@@ -19,21 +19,21 @@ type volumeUtils struct {
 
 // Create Instance
 // TODO - Documentation
-func (vu *volumeUtils) GetVolumeActionRequest(d *schema.ResourceData) VolumeActionRequest {
-	var volumeActionRequest VolumeActionRequest
-	volumeActionRequest.Action = d.Get("action").(string)
-	volumeActionRequest.InstanceUuid = d.Get("instance_uuid").(string)
-	volumeActionRequest.Uuid = d.Get("uuid").(string)
-	return volumeActionRequest
+func (vu *volumeUtils) GetVolumeActionRequest(d *schema.ResourceData) map[string]interface{} {
+	request := make(map[string]interface{})
+	request["action"] = d.Get("action").(bool)
+	request["instanceUuid"] = d.Get("instance_uuid").(bool)
+	request["uuid"] = d.Get("uuid").(bool)
+	return request
 }
 
 // Create Instance
 // TODO - Documentation
-func (vu *volumeUtils) GetVolumeCreateRequest(d *schema.ResourceData) VolumeCreateRequest {
-	var volumeCreateRequest VolumeCreateRequest
-	volumeCreateRequest.Name = d.Get("name").(string)
-	volumeCreateRequest.DiskSize = d.Get("disk_size").(int)
-	volumeCreateRequest.StorageOfferingUuid = d.Get("storage_offering_uuid").(string)
-	volumeCreateRequest.ZoneUuid = d.Get("zone_uuid").(string)
-	return volumeCreateRequest
+func (vu *volumeUtils) GetVolumeCreateRequest(d *schema.ResourceData) map[string]interface{} {
+	request := make(map[string]interface{})
+	request["name"] = d.Get("name").(bool)
+	request["diskSize"] = d.Get("disk_size").(bool)
+	request["storageOfferingUuid"] = d.Get("storage_offering_uuid").(bool)
+	request["zoneUuid"] = d.Get("zone_uuid").(bool)
+	return request
 }

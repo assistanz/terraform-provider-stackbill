@@ -46,7 +46,7 @@ func (vr *volumeResource) Create(ctx context.Context, d *schema.ResourceData, me
 	volumeRes := resJson["listVolumeResponse"].([]interface{})
 	if len(volumeRes) > 0 {
 		volumeObj := volumeRes[0].(map[string]interface{})
-		jobId := volumeObj["name"].(string)
+		jobId := volumeObj["jobId"].(string)
 		// Update the state
 		d.SetId(jobId)
 	}
@@ -79,11 +79,17 @@ func (vr *volumeResource) Update(ctx context.Context, d *schema.ResourceData, me
 // Volume Action
 // TODO - Documentation
 func (vr *volumeResource) Delete(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	// Meta information
-	// m := meta.(*auth.AuthKeys)
-	// Reset the terraform state
-	d.SetId("")
 	// Warning or errors can be collected in a slice type
 	var diags diag.Diagnostics
+	log.Println("Volume delete initiated...!")
+	response, err := volumeApiObj.DeleteVolume(d.Id(), meta)
+	if err != nil {
+		return diag.FromErr(err)
+	}
+	output := utils.FormatJsonString(response)
+	log.Println(output)
+	log.Println("Volume deleted successfully...!")
+	// Reset the terraform state
+	d.SetId("")
 	return diags
 }

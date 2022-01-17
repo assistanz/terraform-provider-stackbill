@@ -51,7 +51,7 @@ func (p *provider) Provider() *schema.Provider {
 			"stackbill_volume_actions":        volume.VolumeActionsProvider(),
 			"stackbill_volume":                volume.VolumeProvider(),
 			"stackbill_network":               network.NetworkProvider(),
-			"stackbill_network_attach":        network.NetworkActionProvider(),
+			"stackbill_network_actions":       network.NetworkActionProvider(),
 		},
 		DataSourcesMap: map[string]*schema.Resource{
 			"stackbill_compute_offering_list":     computeoffering.ComputeOfferingListProvider(),

@@ -13,12 +13,12 @@ func NewInstanceApi() InstanceApi {
 
 //Instance Interfae
 type InstanceApi interface {
-	CreateInstance(CreateRequest, interface{}) (string, error)
-	UpdateInstanceName(UpdateNameRequest, interface{}) (string, error)
-	ResetSshKey(ResetSshkeyRequest, interface{}) (string, error)
-	ResizeInstance(ResizeRequest, interface{}) (string, error)
-	InstanceActions(InstanceActionRequest, interface{}) (string, error)
-	InstanceIsoActions(InstanceIsoActionRequest, interface{}) (string, error)
+	CreateInstance(map[string]interface{}, interface{}) (string, error)
+	UpdateInstanceName(map[string]interface{}, interface{}) (string, error)
+	ResetSshKey(map[string]interface{}, interface{}) (string, error)
+	ResizeInstance(map[string]interface{}, interface{}) (string, error)
+	InstanceActions(map[string]interface{}, interface{}) (string, error)
+	InstanceIsoActions(map[string]interface{}, interface{}) (string, error)
 	ListInstances(string, string, interface{}) (string, error)
 	DeleteInstance(string, interface{}) (string, error)
 }
@@ -29,7 +29,7 @@ type instanceApi struct {
 
 // Update Instance Name
 // TODO - Documentation
-func (ia *instanceApi) CreateInstance(cr CreateRequest, meta interface{}) (string, error) {
+func (ia *instanceApi) CreateInstance(cr map[string]interface{}, meta interface{}) (string, error) {
 	// Meta information
 	m := meta.(*auth.AuthKeys)
 	apiKey := m.ApiKey
@@ -44,12 +44,12 @@ func (ia *instanceApi) CreateInstance(cr CreateRequest, meta interface{}) (strin
 
 // Update Instance Name
 // TODO - Documentation
-func (ia *instanceApi) ResetSshKey(rsr ResetSshkeyRequest, meta interface{}) (string, error) {
+func (ia *instanceApi) ResetSshKey(rsr map[string]interface{}, meta interface{}) (string, error) {
 	// Meta information
 	m := meta.(*auth.AuthKeys)
 	apiKey := m.ApiKey
 	secretKey := m.SecretKey
-	endPoint := api.GetResetSshkeyApi(rsr.Uuid, rsr.SshkeyId)
+	endPoint := api.GetResetSshkeyApi(rsr["uuid"].(string), rsr["sshKeyId"].(string))
 	response, err := httpClient.Get(endPoint, apiKey, secretKey)
 	if err != nil {
 		return "", err
@@ -59,7 +59,7 @@ func (ia *instanceApi) ResetSshKey(rsr ResetSshkeyRequest, meta interface{}) (st
 
 // Reset ssh key
 // TODO - Documentation
-func (ia *instanceApi) UpdateInstanceName(ur UpdateNameRequest, meta interface{}) (string, error) {
+func (ia *instanceApi) UpdateInstanceName(ur map[string]interface{}, meta interface{}) (string, error) {
 	// Meta information
 	m := meta.(*auth.AuthKeys)
 	apiKey := m.ApiKey
@@ -74,13 +74,13 @@ func (ia *instanceApi) UpdateInstanceName(ur UpdateNameRequest, meta interface{}
 
 // Resize VM
 // TODO - Documentation
-func (vs *instanceApi) ResizeInstance(r ResizeRequest, meta interface{}) (string, error) {
+func (vs *instanceApi) ResizeInstance(r map[string]interface{}, meta interface{}) (string, error) {
 	// Meta information
 	m := meta.(*auth.AuthKeys)
 	apiKey := m.ApiKey
 	secretKey := m.SecretKey
-	qryString := "?uuid=" + r.Uuid + "&offeringUuid=" + r.OfferingUuid
-	qryString += "&memory=" + r.Memory + "&cpuCore=" + r.CpuCore
+	qryString := "?uuid=" + r["uuid"].(string) + "&offeringUuid=" + r["offeringUuid"].(string)
+	qryString += "&memory=" + r["memory"].(string) + "&cpuCore=" + r["cpuCore"].(string)
 	endPoint := api.GetInstanceResizeApi() + qryString
 	response, err := httpClient.Get(endPoint, apiKey, secretKey)
 	if err != nil {
@@ -91,17 +91,17 @@ func (vs *instanceApi) ResizeInstance(r ResizeRequest, meta interface{}) (string
 
 // Actions -  start / Stop / Restart
 // TODO - Documentation
-func (vs *instanceApi) InstanceActions(ar InstanceActionRequest, meta interface{}) (string, error) {
+func (vs *instanceApi) InstanceActions(ar map[string]interface{}, meta interface{}) (string, error) {
 	// Meta information
 	m := meta.(*auth.AuthKeys)
 	apiKey := m.ApiKey
 	secretKey := m.SecretKey
 	endPoint := ""
-	switch ar.Action {
+	switch ar["action"].(string) {
 	case START:
-		endPoint = api.GetInstanceStartApi() + "?uuid=" + ar.Uuid
+		endPoint = api.GetInstanceStartApi() + "?uuid=" + ar["uuid"].(string)
 	case STOP:
-		endPoint = api.GetInstanceStopApi() + "?uuid=" + ar.Uuid + "&forceStop=true"
+		endPoint = api.GetInstanceStopApi() + "?uuid=" + ar["uuid"].(string) + "&forceStop=true"
 	default:
 		return "", errors.New("Invalid action provided...!")
 	}
@@ -114,17 +114,17 @@ func (vs *instanceApi) InstanceActions(ar InstanceActionRequest, meta interface{
 
 // Actions -  Attach / Detach
 // TODO - Documentation
-func (vs *instanceApi) InstanceIsoActions(ar InstanceIsoActionRequest, meta interface{}) (string, error) {
+func (vs *instanceApi) InstanceIsoActions(ar map[string]interface{}, meta interface{}) (string, error) {
 	// Meta information
 	m := meta.(*auth.AuthKeys)
 	apiKey := m.ApiKey
 	secretKey := m.SecretKey
 	endPoint := ""
-	switch ar.Action {
+	switch ar["action"].(string) {
 	case ATTACH:
-		endPoint = api.GetInstanceAttachIsoApi(ar.Uuid, ar.IsoUuid)
+		endPoint = api.GetInstanceAttachIsoApi(ar["uuid"].(string), ar["isoUuid"].(string))
 	case DETACH:
-		endPoint = api.GetInstanceDetachIsoApi(ar.Uuid, ar.IsoUuid)
+		endPoint = api.GetInstanceDetachIsoApi(ar["uuid"].(string), ar["isoUuid"].(string))
 	default:
 		return "", errors.New("Invalid action provided...!")
 	}

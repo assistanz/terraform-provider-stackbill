@@ -16,9 +16,9 @@ type NetworkApi interface {
 	ListNetworks(string, string, interface{}) (string, error)
 	ListNetworkOfferings(string, string, interface{}) (string, error)
 	ListVpcNetworkOfferings(string, interface{}) (string, error)
-	CreateNetwork(map[string]interface{}, CreateNetworkRequestOptional, interface{}) (string, error)
+	CreateNetwork(map[string]interface{}, map[string]interface{}, interface{}) (string, error)
 	DeleteNetwork(string, interface{}) (string, error)
-	NetworkActions(string, NetworkActionRequest, interface{}) (string, error)
+	NetworkActions(string, map[string]interface{}, interface{}) (string, error)
 }
 
 // Network api object
@@ -101,12 +101,12 @@ func (nt *networkApi) ListVpcNetworkOfferings(uuid string, meta interface{}) (st
 It will be generated autmatically By terraform
 @Return Response / Error
 */
-func (nt *networkApi) CreateNetwork(cn map[string]interface{}, co CreateNetworkRequestOptional, meta interface{}) (string, error) {
+func (nt *networkApi) CreateNetwork(cn map[string]interface{}, co map[string]interface{}, meta interface{}) (string, error) {
 	// Meta information
 	m := meta.(*auth.AuthKeys)
 	apiKey := m.ApiKey
 	secretKey := m.SecretKey
-	endPoint := api.GetNetworkCreateApi(co.IsPublic, co.SecurityGroupId)
+	endPoint := api.GetNetworkCreateApi(co["isPublic"].(bool), co["securityGroupId"].(string))
 	response, err := httpClient.PostJson(endPoint, apiKey, secretKey, cn)
 	if err != nil {
 		return "", err
@@ -136,7 +136,7 @@ func (nt *networkApi) DeleteNetwork(uuid string, meta interface{}) (string, erro
 
 // Actions -  start / Stop / Restart
 // TODO - Documentation
-func (nt *networkApi) NetworkActions(action string, nr NetworkActionRequest, meta interface{}) (string, error) {
+func (nt *networkApi) NetworkActions(action string, nr map[string]interface{}, meta interface{}) (string, error) {
 	// Meta information
 	m := meta.(*auth.AuthKeys)
 	apiKey := m.ApiKey
