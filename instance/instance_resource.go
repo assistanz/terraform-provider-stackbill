@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"log"
 	"terraform-provider-stackbill/utils"
+	"time"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -51,6 +52,18 @@ func (vs *instanceResource) Create(ctx context.Context, d *schema.ResourceData, 
 		uuid := instanceObj["uuid"].(string)
 		// Update the state
 		d.SetId(uuid)
+		// Check the status
+		time.Sleep(20 * time.Second)
+		for {
+			status, err := instanceApiObj.GetInstanceStatus(uuid, meta)
+			if err != nil {
+				log.Println(err.Error())
+			}
+			if status == "RUNNING" {
+				break
+			}
+			time.Sleep(10 * time.Second)
+		}
 	}
 	output := utils.FormatJsonString(response)
 	log.Println(output)

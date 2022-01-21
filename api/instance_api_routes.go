@@ -10,6 +10,7 @@ var (
 	instanceList          = "instance/instanceList"
 	instanceAttachIso     = "instance/attachIso"
 	instanceDetachIso     = "instance/detachIso"
+	instanceStatus        = "instance/vmStatus"
 )
 
 // Instance create api
@@ -55,4 +56,9 @@ func GetInstanceAttachIsoApi(uuid string, isoUUid string) string {
 // Instace Detach Iso
 func GetInstanceDetachIsoApi(uuid string, isoUUid string) string {
 	return EndPoint + "/" + instanceDetachIso + "?uuid=" + uuid + "&isoUuid=" + isoUUid
+}
+
+// Instance status api
+func GetInstanceStatusApi(uuid string) string {
+	return EndPoint + "/" + instanceStatus + "?uuid=" + uuid
 }

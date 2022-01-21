@@ -3,7 +3,9 @@ package instance
 import (
 	"context"
 	"log"
+	"strings"
 	"terraform-provider-stackbill/utils"
+	"time"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -41,6 +43,23 @@ func (vs *instanceActionsResource) Create(ctx context.Context, d *schema.Resourc
 	if err != nil {
 		return diag.FromErr(err)
 	}
+	// Wait to start or stop the instance
+	time.Sleep(20 * time.Second)
+	for {
+		status, err := instanceApiObj.GetInstanceStatus(uuid, meta)
+		if err != nil {
+			log.Println(err.Error())
+		}
+		if action == START && status == "RUNNING" {
+			response = strings.Replace(response, "STOPPED", "RUNNING", -1)
+			break
+		}
+		if action == STOP && status == "STOPPED" {
+			response = strings.Replace(response, "RUNNING", "STOPPED", -1)
+			break
+		}
+		time.Sleep(10 * time.Second)
+	}
 	output := utils.FormatJsonString(response)
 	log.Println(output)
 	log.Println("Instance " + action + " completed...!")
@@ -73,6 +92,22 @@ func (vs *instanceActionsResource) Update(ctx context.Context, d *schema.Resourc
 	response, err := instanceApiObj.InstanceActions(actionRequest, meta)
 	if err != nil {
 		return diag.FromErr(err)
+	}
+	time.Sleep(20 * time.Second)
+	for {
+		status, err := instanceApiObj.GetInstanceStatus(uuid, meta)
+		if err != nil {
+			log.Println(err.Error())
+		}
+		if action == START && status == "RUNNING" {
+			response = strings.Replace(response, "STOPPED", "RUNNING", -1)
+			break
+		}
+		if action == STOP && status == "STOPPED" {
+			response = strings.Replace(response, "RUNNING", "STOPPED", -1)
+			break
+		}
+		time.Sleep(10 * time.Second)
 	}
 	output := utils.FormatJsonString(response)
 	log.Println(output)

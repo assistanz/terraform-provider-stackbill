@@ -1,6 +1,7 @@
 package instance
 
 import (
+	"encoding/json"
 	"errors"
 	"terraform-provider-stackbill/api"
 	"terraform-provider-stackbill/auth"
@@ -21,6 +22,7 @@ type InstanceApi interface {
 	InstanceIsoActions(map[string]interface{}, interface{}) (string, error)
 	ListInstances(string, string, interface{}) (string, error)
 	DeleteInstance(string, interface{}) (string, error)
+	GetInstanceStatus(string, interface{}) (string, error)
 }
 
 //Instance utils Object
@@ -167,4 +169,24 @@ func (vs *instanceApi) ListInstances(zoneUuid string, uuid string, meta interfac
 		return "", err
 	}
 	return response, nil
+}
+
+// Resize VM
+// TODO - Documentation
+func (vs *instanceApi) GetInstanceStatus(uuid string, meta interface{}) (string, error) {
+	// Meta information
+	m := meta.(*auth.AuthKeys)
+	apiKey := m.ApiKey
+	secretKey := m.SecretKey
+	endPoint := api.GetInstanceStatusApi(uuid)
+	response, err := httpClient.Get(endPoint, apiKey, secretKey)
+	if err != nil {
+		return "", err
+	}
+	var resJson map[string]interface{}
+	if err := json.Unmarshal([]byte(response), &resJson); err != nil {
+		return "", err
+	}
+	status := resJson["status"].(string)
+	return status, nil
 }

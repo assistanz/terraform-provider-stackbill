@@ -4,6 +4,7 @@ import (
 	"context"
 	"log"
 	"terraform-provider-stackbill/utils"
+	"time"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -50,6 +51,18 @@ func (ir *instanceResizeResource) Create(ctx context.Context, d *schema.Resource
 	if err != nil {
 		return diag.FromErr(err)
 	}
+	// Wait to start or stop the instance
+	time.Sleep(20 * time.Second)
+	for {
+		status, err := instanceApiObj.GetInstanceStatus(uuid, meta)
+		if err != nil {
+			log.Println(err.Error())
+		}
+		if status == "RUNNING" {
+			break
+		}
+		time.Sleep(10 * time.Second)
+	}
 	output := utils.FormatJsonString(response)
 	log.Println(output)
 	log.Println("Instance resize successful...!")
@@ -79,6 +92,18 @@ func (ir *instanceResizeResource) Update(ctx context.Context, d *schema.Resource
 	response, err := ir.Resize(ctx, d, meta)
 	if err != nil {
 		return diag.FromErr(err)
+	}
+	// Wait to start or stop the instance
+	time.Sleep(20 * time.Second)
+	for {
+		status, err := instanceApiObj.GetInstanceStatus(uuid, meta)
+		if err != nil {
+			log.Println(err.Error())
+		}
+		if status == "RUNNING" {
+			break
+		}
+		time.Sleep(10 * time.Second)
 	}
 	output := utils.FormatJsonString(response)
 	log.Println(output)
