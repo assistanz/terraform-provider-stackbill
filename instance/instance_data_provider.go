@@ -101,8 +101,16 @@ func InstanceListProvider() *schema.Resource {
 							Type:     schema.TypeString,
 							Computed: true,
 						},
+						"ssh_uuid": &schema.Schema{
+							Type:     schema.TypeString,
+							Computed: true,
+						},
 						"is_active": &schema.Schema{
 							Type:     schema.TypeBool,
+							Computed: true,
+						},
+						"root_disk_size": &schema.Schema{
+							Type:     schema.TypeString,
 							Computed: true,
 						},
 					},

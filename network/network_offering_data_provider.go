@@ -20,7 +20,7 @@ func NetworkOfferingListProvider() *schema.Resource {
 				Type:     schema.TypeInt,
 				Computed: true,
 			},
-			"networks": &schema.Schema{
+			"networkofferings": &schema.Schema{
 				Type:     schema.TypeList,
 				Computed: true,
 				Elem: &schema.Resource{

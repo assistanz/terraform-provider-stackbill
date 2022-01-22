@@ -16,7 +16,7 @@ func VpcNetworkOfferingListProvider() *schema.Resource {
 				Type:     schema.TypeInt,
 				Computed: true,
 			},
-			"networks": &schema.Schema{
+			"vpcnetworkofferings": &schema.Schema{
 				Type:     schema.TypeList,
 				Computed: true,
 				Elem: &schema.Resource{

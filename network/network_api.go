@@ -37,7 +37,7 @@ func (nt *networkApi) ListNetworks(zoneUuid string, uuid string, meta interface{
 	m := meta.(*auth.AuthKeys)
 	apiKey := m.ApiKey
 	secretKey := m.SecretKey
-	endPoint := api.GetNewNetworkOfferingListApi(zoneUuid)
+	endPoint := api.GetNewNetworkListApi(zoneUuid)
 	if uuid != "" {
 		endPoint += "&uuid=" + uuid
 	}

@@ -57,7 +57,7 @@ func (no *networkOfferingData) List(ctx context.Context, d *schema.ResourceData,
 		}
 		list = append(list, i)
 	}
-	if err := d.Set("networks", list); err != nil {
+	if err := d.Set("networkofferings", list); err != nil {
 		return diag.FromErr(err)
 	}
 	log.Println("List offering networks successful...!")

@@ -78,6 +78,10 @@ func VolumeListProvider() *schema.Resource {
 							Type:     schema.TypeInt,
 							Computed: true,
 						},
+						"job_id": &schema.Schema{
+							Type:     schema.TypeString,
+							Computed: true,
+						},
 					},
 				},
 			},
