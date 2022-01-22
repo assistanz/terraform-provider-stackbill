@@ -49,6 +49,7 @@ func (vs *instanceActionsResource) Create(ctx context.Context, d *schema.Resourc
 		status, err := instanceApiObj.GetInstanceStatus(uuid, meta)
 		if err != nil {
 			log.Println(err.Error())
+			break
 		}
 		if action == START && status == "RUNNING" {
 			response = strings.Replace(response, "STOPPED", "RUNNING", -1)
@@ -98,6 +99,7 @@ func (vs *instanceActionsResource) Update(ctx context.Context, d *schema.Resourc
 		status, err := instanceApiObj.GetInstanceStatus(uuid, meta)
 		if err != nil {
 			log.Println(err.Error())
+			break
 		}
 		if action == START && status == "RUNNING" {
 			response = strings.Replace(response, "STOPPED", "RUNNING", -1)

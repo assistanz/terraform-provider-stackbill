@@ -48,6 +48,7 @@ func (ac *instanceIsoActionsResource) Create(ctx context.Context, d *schema.Reso
 		status, err := instanceApiObj.GetInstanceStatus(uuid, meta)
 		if err != nil {
 			log.Println(err.Error())
+			break
 		}
 		if status == "RUNNING" {
 			break
@@ -93,6 +94,7 @@ func (vs *instanceIsoActionsResource) Update(ctx context.Context, d *schema.Reso
 		status, err := instanceApiObj.GetInstanceStatus(uuid, meta)
 		if err != nil {
 			log.Println(err.Error())
+			break
 		}
 		if status == "RUNNING" {
 			break

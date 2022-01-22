@@ -57,6 +57,7 @@ func (irs *instanceResetSshkeyResource) Create(ctx context.Context, d *schema.Re
 		status, err := instanceApiObj.GetInstanceStatus(uuid, meta)
 		if err != nil {
 			log.Println(err.Error())
+			break
 		}
 		if status == "RUNNING" {
 			break
@@ -99,6 +100,7 @@ func (irs *instanceResetSshkeyResource) Update(ctx context.Context, d *schema.Re
 		status, err := instanceApiObj.GetInstanceStatus(uuid, meta)
 		if err != nil {
 			log.Println(err.Error())
+			break
 		}
 		if status == "RUNNING" {
 			break

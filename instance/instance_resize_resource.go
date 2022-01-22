@@ -57,6 +57,7 @@ func (ir *instanceResizeResource) Create(ctx context.Context, d *schema.Resource
 		status, err := instanceApiObj.GetInstanceStatus(uuid, meta)
 		if err != nil {
 			log.Println(err.Error())
+			break
 		}
 		if status == "RUNNING" {
 			break
@@ -99,6 +100,7 @@ func (ir *instanceResizeResource) Update(ctx context.Context, d *schema.Resource
 		status, err := instanceApiObj.GetInstanceStatus(uuid, meta)
 		if err != nil {
 			log.Println(err.Error())
+			break
 		}
 		if status == "RUNNING" {
 			break
