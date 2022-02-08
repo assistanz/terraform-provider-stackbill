@@ -9,6 +9,7 @@ terraform {
 }
 
 provider "stackbill" {
-  api_key    = "EFq1o38cXDDq9mn850t-pDXuLq33ahwBFWcsgPFK9mTADA-HROCsfsIhjOuL"
-  secret_key = "LKdDxtfboa18le8cJDe98XWKb7Le6C5WrRNSesxasHcg9vZmjA5tS437vYl-"
+  url    = "http://wolfapp.assistanz24x7.com/restapi"
+  api_key    = "NqkTfkADuBFCNid2ypPViqq3M2vMOQddtjLyIQJ84LygYkppwfO1DZFCZX5H"
+  secret_key = "H_eRcufZShygDM2ZV6g94gA9ecmgE9cKGTZ31VOkGXE72EiupuMnhuMZd0hs"
 }

@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"errors"
 	"terraform-provider-stackbill/api"
-	"terraform-provider-stackbill/auth"
 )
 
 // Instance util Object
@@ -33,11 +32,11 @@ type instanceApi struct {
 // TODO - Documentation
 func (ia *instanceApi) CreateInstance(cr map[string]interface{}, meta interface{}) (string, error) {
 	// Meta information
-	m := meta.(*auth.AuthKeys)
-	apiKey := m.ApiKey
-	secretKey := m.SecretKey
+	// m := meta.(*auth.AuthKeys)
+	// apiKey := m.ApiKey
+	// secretKey := m.SecretKey
 	endPoint := api.GetInstanceCreateApi()
-	response, err := httpClient.PostJson(endPoint, apiKey, secretKey, cr)
+	response, err := httpClient.PostJson(endPoint, cr)
 	if err != nil {
 		return "", err
 	}
@@ -48,11 +47,11 @@ func (ia *instanceApi) CreateInstance(cr map[string]interface{}, meta interface{
 // TODO - Documentation
 func (ia *instanceApi) ResetSshKey(rsr map[string]interface{}, meta interface{}) (string, error) {
 	// Meta information
-	m := meta.(*auth.AuthKeys)
-	apiKey := m.ApiKey
-	secretKey := m.SecretKey
+	// m := meta.(*auth.AuthKeys)
+	// apiKey := m.ApiKey
+	// secretKey := m.SecretKey
 	endPoint := api.GetResetSshkeyApi(rsr["uuid"].(string), rsr["sshKeyId"].(string))
-	response, err := httpClient.Get(endPoint, apiKey, secretKey)
+	response, err := httpClient.Get(endPoint)
 	if err != nil {
 		return "", err
 	}
@@ -63,11 +62,11 @@ func (ia *instanceApi) ResetSshKey(rsr map[string]interface{}, meta interface{})
 // TODO - Documentation
 func (ia *instanceApi) UpdateInstanceName(ur map[string]interface{}, meta interface{}) (string, error) {
 	// Meta information
-	m := meta.(*auth.AuthKeys)
-	apiKey := m.ApiKey
-	secretKey := m.SecretKey
+	// m := meta.(*auth.AuthKeys)
+	// apiKey := m.ApiKey
+	// secretKey := m.SecretKey
 	endPoint := api.GetInstanceNameUpdateApi()
-	response, err := httpClient.PutJson(endPoint, apiKey, secretKey, ur)
+	response, err := httpClient.PutJson(endPoint, ur)
 	if err != nil {
 		return "", err
 	}
@@ -78,13 +77,13 @@ func (ia *instanceApi) UpdateInstanceName(ur map[string]interface{}, meta interf
 // TODO - Documentation
 func (vs *instanceApi) ResizeInstance(r map[string]interface{}, meta interface{}) (string, error) {
 	// Meta information
-	m := meta.(*auth.AuthKeys)
-	apiKey := m.ApiKey
-	secretKey := m.SecretKey
+	// m := meta.(*auth.AuthKeys)
+	// apiKey := m.ApiKey
+	// secretKey := m.SecretKey
 	qryString := "?uuid=" + r["uuid"].(string) + "&offeringUuid=" + r["offeringUuid"].(string)
 	qryString += "&memory=" + r["memory"].(string) + "&cpuCore=" + r["cpuCore"].(string)
 	endPoint := api.GetInstanceResizeApi() + qryString
-	response, err := httpClient.Get(endPoint, apiKey, secretKey)
+	response, err := httpClient.Get(endPoint)
 	if err != nil {
 		return "", err
 	}
@@ -95,9 +94,9 @@ func (vs *instanceApi) ResizeInstance(r map[string]interface{}, meta interface{}
 // TODO - Documentation
 func (vs *instanceApi) InstanceActions(ar map[string]interface{}, meta interface{}) (string, error) {
 	// Meta information
-	m := meta.(*auth.AuthKeys)
-	apiKey := m.ApiKey
-	secretKey := m.SecretKey
+	// m := meta.(*auth.AuthKeys)
+	// apiKey := m.ApiKey
+	// secretKey := m.SecretKey
 	endPoint := ""
 	switch ar["action"].(string) {
 	case START:
@@ -107,7 +106,7 @@ func (vs *instanceApi) InstanceActions(ar map[string]interface{}, meta interface
 	default:
 		return "", errors.New("Invalid action provided...!")
 	}
-	response, err := httpClient.Get(endPoint, apiKey, secretKey)
+	response, err := httpClient.Get(endPoint)
 	if err != nil {
 		return "", err
 	}
@@ -118,9 +117,9 @@ func (vs *instanceApi) InstanceActions(ar map[string]interface{}, meta interface
 // TODO - Documentation
 func (vs *instanceApi) InstanceIsoActions(ar map[string]interface{}, meta interface{}) (string, error) {
 	// Meta information
-	m := meta.(*auth.AuthKeys)
-	apiKey := m.ApiKey
-	secretKey := m.SecretKey
+	// m := meta.(*auth.AuthKeys)
+	// apiKey := m.ApiKey
+	// secretKey := m.SecretKey
 	endPoint := ""
 	switch ar["action"].(string) {
 	case ATTACH:
@@ -130,7 +129,7 @@ func (vs *instanceApi) InstanceIsoActions(ar map[string]interface{}, meta interf
 	default:
 		return "", errors.New("Invalid action provided...!")
 	}
-	response, err := httpClient.Get(endPoint, apiKey, secretKey)
+	response, err := httpClient.Get(endPoint)
 	if err != nil {
 		return "", err
 	}
@@ -141,12 +140,12 @@ func (vs *instanceApi) InstanceIsoActions(ar map[string]interface{}, meta interf
 // TODO - Documentation
 func (vs *instanceApi) DeleteInstance(uuid string, meta interface{}) (string, error) {
 	// Meta information
-	m := meta.(*auth.AuthKeys)
-	apiKey := m.ApiKey
-	secretKey := m.SecretKey
+	// m := meta.(*auth.AuthKeys)
+	// apiKey := m.ApiKey
+	// secretKey := m.SecretKey
 	qryString := "?uuid=" + uuid + "&expunge=true"
 	endPoint := api.GetInstanceDeleteApi() + qryString
-	response, err := httpClient.Get(endPoint, apiKey, secretKey)
+	response, err := httpClient.Get(endPoint)
 	if err != nil {
 		return "", err
 	}
@@ -157,14 +156,14 @@ func (vs *instanceApi) DeleteInstance(uuid string, meta interface{}) (string, er
 // TODO - Documentation
 func (vs *instanceApi) ListInstances(zoneUuid string, uuid string, meta interface{}) (string, error) {
 	// Meta information
-	m := meta.(*auth.AuthKeys)
-	apiKey := m.ApiKey
-	secretKey := m.SecretKey
+	// m := meta.(*auth.AuthKeys)
+	// apiKey := m.ApiKey
+	// secretKey := m.SecretKey
 	endPoint := api.GetInstanceListApi(zoneUuid)
 	if uuid != "" {
 		endPoint += "&vmUuid=" + uuid
 	}
-	response, err := httpClient.Get(endPoint, apiKey, secretKey)
+	response, err := httpClient.Get(endPoint)
 	if err != nil {
 		return "", err
 	}
@@ -175,11 +174,11 @@ func (vs *instanceApi) ListInstances(zoneUuid string, uuid string, meta interfac
 // TODO - Documentation
 func (vs *instanceApi) GetInstanceStatus(uuid string, meta interface{}) (string, error) {
 	// Meta information
-	m := meta.(*auth.AuthKeys)
-	apiKey := m.ApiKey
-	secretKey := m.SecretKey
+	// m := meta.(*auth.AuthKeys)
+	// apiKey := m.ApiKey
+	// secretKey := m.SecretKey
 	endPoint := api.GetInstanceStatusApi(uuid)
-	response, err := httpClient.Get(endPoint, apiKey, secretKey)
+	response, err := httpClient.Get(endPoint)
 	if err != nil {
 		return "", err
 	}

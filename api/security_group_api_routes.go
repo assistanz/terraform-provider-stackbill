@@ -6,5 +6,5 @@ var (
 
 // Security Group Api
 func GetSecurityGroupListApi() string {
-	return EndPoint + "/" + securityGroupApiList
+	return END_POINT + "/" + securityGroupApiList
 }

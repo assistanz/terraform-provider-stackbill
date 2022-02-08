@@ -6,5 +6,5 @@ var (
 
 // Compute Offering List Api
 func GetComputeOfferingListApi(zoneUuid string) string {
-	return EndPoint + "/" + computeOfferingList + "?zoneUuid=" + zoneUuid
+	return END_POINT + "/" + computeOfferingList + "?zoneUuid=" + zoneUuid
 }

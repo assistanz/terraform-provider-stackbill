@@ -7,10 +7,10 @@ var (
 
 // SshKey List api
 func GetSshkeyListApi() string {
-	return EndPoint + "/" + sshKeyList
+	return END_POINT + "/" + sshKeyList
 }
 
 // SshKey List api
 func GetResetSshkeyApi(uuid string, sshKeyId string) string {
-	return EndPoint + "/" + resetSshKey + "?uuid=" + uuid + "&sshUuid=" + sshKeyId
+	return END_POINT + "/" + resetSshKey + "?uuid=" + uuid + "&sshUuid=" + sshKeyId
 }

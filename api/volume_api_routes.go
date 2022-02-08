@@ -10,25 +10,25 @@ var (
 
 // Volume List api
 func GetVolumeListApi(zoneUuid string) string {
-	return EndPoint + "/" + volumeList + "?zoneUuid=" + zoneUuid
+	return END_POINT + "/" + volumeList + "?zoneUuid=" + zoneUuid
 }
 
 // Volume Attach api
 func GetVolumeAttachApi(uuid string) string {
-	return EndPoint + "/" + attachVolume + "?uuid=" + uuid
+	return END_POINT + "/" + attachVolume + "?uuid=" + uuid
 }
 
 // Volume Detach api
 func GetVolumeDetachApi(uuid string) string {
-	return EndPoint + "/" + detachVolume + "?uuid=" + uuid
+	return END_POINT + "/" + detachVolume + "?uuid=" + uuid
 }
 
 // Volume Create api
 func GetVolumeCreateApi() string {
-	return EndPoint + "/" + createVolume
+	return END_POINT + "/" + createVolume
 }
 
 // Volume Delete api
 func GetVolumeDeleteApi(uuid string) string {
-	return EndPoint + "/" + deleteVolume + "/" + uuid
+	return END_POINT + "/" + deleteVolume + "/" + uuid
 }

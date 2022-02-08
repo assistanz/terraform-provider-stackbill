@@ -8,15 +8,15 @@ var (
 
 // Instance Snapshot api
 func GetVmSnapshotCreateApi() string {
-	return EndPoint + "/" + vmSnapshot
+	return END_POINT + "/" + vmSnapshot
 }
 
 // Snapshot List api
 func GetVmSnapshotListApi(zoneUuid string) string {
-	return EndPoint + "/" + vmSnapShotList + "?zoneUuid=" + zoneUuid
+	return END_POINT + "/" + vmSnapShotList + "?zoneUuid=" + zoneUuid
 }
 
 // Zone List api
 func GetVmSnapshotDeleteApi(uuid string) string {
-	return EndPoint + "/" + vmSnapshotDelete + "/" + uuid
+	return END_POINT + "/" + vmSnapshotDelete + "/" + uuid
 }

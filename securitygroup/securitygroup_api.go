@@ -2,7 +2,6 @@ package securitygroup
 
 import (
 	"terraform-provider-stackbill/api"
-	"terraform-provider-stackbill/auth"
 )
 
 // New Securitygroup Api
@@ -28,14 +27,14 @@ It will be generated autmatically By terraform
 */
 func (sg *securityGroupApi) ListSecurityGroups(uuid string, meta interface{}) (string, error) {
 	// Meta information
-	m := meta.(*auth.AuthKeys)
-	apiKey := m.ApiKey
-	secretKey := m.SecretKey
+	// m := meta.(*auth.AuthKeys)
+	// apiKey := m.ApiKey
+	// secretKey := m.SecretKey
 	endPoint := api.GetSecurityGroupListApi()
 	if uuid != "" {
 		endPoint += "?uuid=" + uuid
 	}
-	response, err := httpClient.Get(endPoint, apiKey, secretKey)
+	response, err := httpClient.Get(endPoint)
 	if err != nil {
 		return "", err
 	}

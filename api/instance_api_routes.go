@@ -15,50 +15,50 @@ var (
 
 // Instance create api
 func GetInstanceCreateApi() string {
-	return EndPoint + "/" + instancePostApi
+	return END_POINT + "/" + instancePostApi
 }
 
 // Instance name update api
 func GetInstanceNameUpdateApi() string {
-	return EndPoint + "/" + instanceNameUpdateApi
+	return END_POINT + "/" + instanceNameUpdateApi
 }
 
 // Start instance api
 func GetInstanceStartApi() string {
-	return EndPoint + "/" + instanceStart
+	return END_POINT + "/" + instanceStart
 }
 
 // Stop instance api
 func GetInstanceStopApi() string {
-	return EndPoint + "/" + instanceStop
+	return END_POINT + "/" + instanceStop
 }
 
 // Delete instance api
 func GetInstanceDeleteApi() string {
-	return EndPoint + "/" + instanceDelete
+	return END_POINT + "/" + instanceDelete
 }
 
 // Instance Resize api
 func GetInstanceResizeApi() string {
-	return EndPoint + "/" + instanceResize
+	return END_POINT + "/" + instanceResize
 }
 
 // Instance List api
 func GetInstanceListApi(zoneId string) string {
-	return EndPoint + "/" + instanceList + "?zoneUuid=" + zoneId
+	return END_POINT + "/" + instanceList + "?zoneUuid=" + zoneId
 }
 
 // Instace Attach Iso
 func GetInstanceAttachIsoApi(uuid string, isoUUid string) string {
-	return EndPoint + "/" + instanceAttachIso + "?uuid=" + uuid + "&isoUuid=" + isoUUid
+	return END_POINT + "/" + instanceAttachIso + "?uuid=" + uuid + "&isoUuid=" + isoUUid
 }
 
 // Instace Detach Iso
 func GetInstanceDetachIsoApi(uuid string, isoUUid string) string {
-	return EndPoint + "/" + instanceDetachIso + "?uuid=" + uuid + "&isoUuid=" + isoUUid
+	return END_POINT + "/" + instanceDetachIso + "?uuid=" + uuid + "&isoUuid=" + isoUUid
 }
 
 // Instance status api
 func GetInstanceStatusApi(uuid string) string {
-	return EndPoint + "/" + instanceStatus + "?uuid=" + uuid
+	return END_POINT + "/" + instanceStatus + "?uuid=" + uuid
 }

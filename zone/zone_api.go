@@ -2,7 +2,6 @@ package zone
 
 import (
 	"terraform-provider-stackbill/api"
-	"terraform-provider-stackbill/auth"
 )
 
 // New Zone Api
@@ -23,14 +22,14 @@ type zoneApi struct {
 // TODO - Documentation
 func (z *zoneApi) ListZones(uuid string, meta interface{}) (string, error) {
 	// Meta information
-	m := meta.(*auth.AuthKeys)
-	apiKey := m.ApiKey
-	secretKey := m.SecretKey
+	// m := meta.(*auth.AuthKeys)
+	// apiKey := m.ApiKey
+	// secretKey := m.SecretKey
 	endPoint := api.GetZoneListApi()
 	if uuid != "" {
 		endPoint += "?uuid=" + uuid
 	}
-	response, err := httpClient.Get(endPoint, apiKey, secretKey)
+	response, err := httpClient.Get(endPoint)
 	if err != nil {
 		return "", err
 	}

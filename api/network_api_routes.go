@@ -14,17 +14,17 @@ var (
 
 // Network List api
 func GetNewNetworkListApi(zoneUuid string) string {
-	return EndPoint + "/" + networkList + "?zoneUuid=" + zoneUuid
+	return END_POINT + "/" + networkList + "?zoneUuid=" + zoneUuid
 }
 
 // Network Offering List api
 func GetNewNetworkOfferingListApi(zoneUuid string) string {
-	return EndPoint + "/" + networkOfferingList + "?zoneUuid=" + zoneUuid
+	return END_POINT + "/" + networkOfferingList + "?zoneUuid=" + zoneUuid
 }
 
 // Network Offering List api
 func GetNewVpcNetworkOfferingListApi() string {
-	return EndPoint + "/" + vpcNetworkOfferingList
+	return END_POINT + "/" + vpcNetworkOfferingList
 }
 
 // Network Offering List api
@@ -33,20 +33,20 @@ func GetNetworkCreateApi(isPublic bool, securityGroupId string) string {
 	if securityGroupId != "" {
 		secrityGroup = "&securityGroupId=" + securityGroupId
 	}
-	return EndPoint + "/" + networkCreate + "?isPublic=" + strconv.FormatBool(isPublic) + secrityGroup
+	return END_POINT + "/" + networkCreate + "?isPublic=" + strconv.FormatBool(isPublic) + secrityGroup
 }
 
 // Network Offering List api
 func GetNetworkDeleteApi(uuid string) string {
-	return EndPoint + "/" + networkDelete + "/" + uuid
+	return END_POINT + "/" + networkDelete + "/" + uuid
 }
 
 // Network Attach api
 func GetVmNetworkAddApi() string {
-	return EndPoint + "/" + vmNetworkAdd
+	return END_POINT + "/" + vmNetworkAdd
 }
 
 // Network Attach api
 func GetVmNetworkDeleteApi() string {
-	return EndPoint + "/" + vmNetworkDelete
+	return END_POINT + "/" + vmNetworkDelete
 }

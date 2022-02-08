@@ -3,7 +3,6 @@ package network
 import (
 	"errors"
 	"terraform-provider-stackbill/api"
-	"terraform-provider-stackbill/auth"
 )
 
 // New Network Api
@@ -34,14 +33,14 @@ It will be generated autmatically By terraform
 */
 func (nt *networkApi) ListNetworks(zoneUuid string, uuid string, meta interface{}) (string, error) {
 	// Meta information
-	m := meta.(*auth.AuthKeys)
-	apiKey := m.ApiKey
-	secretKey := m.SecretKey
+	// m := meta.(*auth.AuthKeys)
+	// apiKey := m.ApiKey
+	// secretKey := m.SecretKey
 	endPoint := api.GetNewNetworkListApi(zoneUuid)
 	if uuid != "" {
 		endPoint += "&uuid=" + uuid
 	}
-	response, err := httpClient.Get(endPoint, apiKey, secretKey)
+	response, err := httpClient.Get(endPoint)
 	if err != nil {
 		return "", err
 	}
@@ -57,14 +56,14 @@ It will be generated autmatically By terraform
 */
 func (nt *networkApi) ListNetworkOfferings(zoneUuid string, uuid string, meta interface{}) (string, error) {
 	// Meta information
-	m := meta.(*auth.AuthKeys)
-	apiKey := m.ApiKey
-	secretKey := m.SecretKey
+	// m := meta.(*auth.AuthKeys)
+	// apiKey := m.ApiKey
+	// secretKey := m.SecretKey
 	endPoint := api.GetNewNetworkOfferingListApi(zoneUuid)
 	if uuid != "" {
 		endPoint += "&uuid=" + uuid
 	}
-	response, err := httpClient.Get(endPoint, apiKey, secretKey)
+	response, err := httpClient.Get(endPoint)
 	if err != nil {
 		return "", err
 	}
@@ -80,14 +79,14 @@ It will be generated autmatically By terraform
 */
 func (nt *networkApi) ListVpcNetworkOfferings(uuid string, meta interface{}) (string, error) {
 	// Meta information
-	m := meta.(*auth.AuthKeys)
-	apiKey := m.ApiKey
-	secretKey := m.SecretKey
+	// m := meta.(*auth.AuthKeys)
+	// apiKey := m.ApiKey
+	// secretKey := m.SecretKey
 	endPoint := api.GetNewVpcNetworkOfferingListApi()
 	if uuid != "" {
 		endPoint += "?uuid=" + uuid
 	}
-	response, err := httpClient.Get(endPoint, apiKey, secretKey)
+	response, err := httpClient.Get(endPoint)
 	if err != nil {
 		return "", err
 	}
@@ -103,11 +102,11 @@ It will be generated autmatically By terraform
 */
 func (nt *networkApi) CreateNetwork(cn map[string]interface{}, co map[string]interface{}, meta interface{}) (string, error) {
 	// Meta information
-	m := meta.(*auth.AuthKeys)
-	apiKey := m.ApiKey
-	secretKey := m.SecretKey
+	// m := meta.(*auth.AuthKeys)
+	// apiKey := m.ApiKey
+	// secretKey := m.SecretKey
 	endPoint := api.GetNetworkCreateApi(co["isPublic"].(bool), co["securityGroupId"].(string))
-	response, err := httpClient.PostJson(endPoint, apiKey, secretKey, cn)
+	response, err := httpClient.PostJson(endPoint, cn)
 	if err != nil {
 		return "", err
 	}
@@ -123,11 +122,11 @@ It will be generated autmatically By terraform
 */
 func (nt *networkApi) DeleteNetwork(uuid string, meta interface{}) (string, error) {
 	// Meta information
-	m := meta.(*auth.AuthKeys)
-	apiKey := m.ApiKey
-	secretKey := m.SecretKey
+	// m := meta.(*auth.AuthKeys)
+	// apiKey := m.ApiKey
+	// secretKey := m.SecretKey
 	endPoint := api.GetNetworkDeleteApi(uuid)
-	response, err := httpClient.Delete(endPoint, apiKey, secretKey)
+	response, err := httpClient.Delete(endPoint)
 	if err != nil {
 		return "", err
 	}
@@ -138,9 +137,9 @@ func (nt *networkApi) DeleteNetwork(uuid string, meta interface{}) (string, erro
 // TODO - Documentation
 func (nt *networkApi) NetworkActions(action string, nr map[string]interface{}, meta interface{}) (string, error) {
 	// Meta information
-	m := meta.(*auth.AuthKeys)
-	apiKey := m.ApiKey
-	secretKey := m.SecretKey
+	// m := meta.(*auth.AuthKeys)
+	// apiKey := m.ApiKey
+	// secretKey := m.SecretKey
 	endPoint := ""
 	switch action {
 	case ADD:
@@ -150,7 +149,7 @@ func (nt *networkApi) NetworkActions(action string, nr map[string]interface{}, m
 	default:
 		return "", errors.New("Invalid action provided...!")
 	}
-	response, err := httpClient.PostJson(endPoint, apiKey, secretKey, nr)
+	response, err := httpClient.PostJson(endPoint, nr)
 	if err != nil {
 		return "", err
 	}

@@ -3,7 +3,6 @@ package volume
 import (
 	"errors"
 	"terraform-provider-stackbill/api"
-	"terraform-provider-stackbill/auth"
 )
 
 // New Volume Api
@@ -27,14 +26,14 @@ type volumeApi struct {
 // TODO - Documentation
 func (v *volumeApi) ListVolumes(zoneUuid string, uuid string, meta interface{}) (string, error) {
 	// Meta information
-	m := meta.(*auth.AuthKeys)
-	apiKey := m.ApiKey
-	secretKey := m.SecretKey
+	// m := meta.(*auth.AuthKeys)
+	// apiKey := m.ApiKey
+	// secretKey := m.SecretKey
 	endPoint := api.GetVolumeListApi(zoneUuid)
 	if uuid != "" {
 		endPoint += "&uuid=" + uuid
 	}
-	response, err := httpClient.Get(endPoint, apiKey, secretKey)
+	response, err := httpClient.Get(endPoint)
 	if err != nil {
 		return "", err
 	}
@@ -45,9 +44,9 @@ func (v *volumeApi) ListVolumes(zoneUuid string, uuid string, meta interface{}) 
 // TODO - Documentation
 func (v *volumeApi) VolumeActions(vr map[string]interface{}, meta interface{}) (string, error) {
 	// Meta information
-	m := meta.(*auth.AuthKeys)
-	apiKey := m.ApiKey
-	secretKey := m.SecretKey
+	// m := meta.(*auth.AuthKeys)
+	// apiKey := m.ApiKey
+	// secretKey := m.SecretKey
 	endPoint := ""
 	switch vr["action"].(string) {
 	case ATTACH:
@@ -57,7 +56,7 @@ func (v *volumeApi) VolumeActions(vr map[string]interface{}, meta interface{}) (
 	default:
 		return "", errors.New("Invalid action provided...!")
 	}
-	response, err := httpClient.Get(endPoint, apiKey, secretKey)
+	response, err := httpClient.Get(endPoint)
 	if err != nil {
 		return "", err
 	}
@@ -68,11 +67,11 @@ func (v *volumeApi) VolumeActions(vr map[string]interface{}, meta interface{}) (
 // TODO - Documentation
 func (v *volumeApi) CreateVolume(vc map[string]interface{}, meta interface{}) (string, error) {
 	// Meta information
-	m := meta.(*auth.AuthKeys)
-	apiKey := m.ApiKey
-	secretKey := m.SecretKey
+	// m := meta.(*auth.AuthKeys)
+	// apiKey := m.ApiKey
+	// secretKey := m.SecretKey
 	endPoint := api.GetVolumeCreateApi()
-	response, err := httpClient.PostJson(endPoint, apiKey, secretKey, vc)
+	response, err := httpClient.PostJson(endPoint, vc)
 	if err != nil {
 		return "", err
 	}
@@ -83,11 +82,11 @@ func (v *volumeApi) CreateVolume(vc map[string]interface{}, meta interface{}) (s
 // TODO - Documentation
 func (v *volumeApi) DeleteVolume(uuid string, meta interface{}) (string, error) {
 	// Meta information
-	m := meta.(*auth.AuthKeys)
-	apiKey := m.ApiKey
-	secretKey := m.SecretKey
+	// m := meta.(*auth.AuthKeys)
+	// apiKey := m.ApiKey
+	// secretKey := m.SecretKey
 	endPoint := api.GetVolumeDeleteApi(uuid)
-	response, err := httpClient.Delete(endPoint, apiKey, secretKey)
+	response, err := httpClient.Delete(endPoint)
 	if err != nil {
 		return "", err
 	}

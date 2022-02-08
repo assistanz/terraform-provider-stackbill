@@ -6,5 +6,5 @@ var (
 
 // Storage Offering List Api
 func GetStorageOfferingListApi(zoneUuid string) string {
-	return EndPoint + "/" + storageOfferingList + "?zoneUuid=" + zoneUuid
+	return END_POINT + "/" + storageOfferingList + "?zoneUuid=" + zoneUuid
 }

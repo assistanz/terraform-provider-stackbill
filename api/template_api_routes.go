@@ -6,5 +6,5 @@ var (
 
 // Template List api
 func GetNewTemplateListApi(zoneUuid string) string {
-	return EndPoint + "/" + templateList + "?zoneUuid=" + zoneUuid
+	return END_POINT + "/" + templateList + "?zoneUuid=" + zoneUuid
 }

@@ -2,6 +2,7 @@ package stackbill
 
 import (
 	"context"
+	"terraform-provider-stackbill/api"
 	"terraform-provider-stackbill/auth"
 	"terraform-provider-stackbill/computeoffering"
 	"terraform-provider-stackbill/instance"
@@ -69,6 +70,11 @@ func (p *provider) Provider() *schema.Provider {
 			"stackbill_security_group_list":       securitygroup.SecurityGroupListProvider(),
 		},
 		Schema: map[string]*schema.Schema{
+			"url": {
+				Type:        schema.TypeString,
+				Required:    true,
+				Description: "Stackbill URL",
+			},
 			"api_key": {
 				Type:        schema.TypeString,
 				Required:    true,
@@ -87,10 +93,14 @@ func (p *provider) Provider() *schema.Provider {
 
 // Configure function
 func (p *provider) configure(_ context.Context, d *schema.ResourceData) (interface{}, diag.Diagnostics) {
+	url := d.Get("url").(string)
 	apiKey := d.Get("api_key").(string)
 	secretKey := d.Get("secret_key").(string)
+	api.END_POINT = d.Get("url").(string)
+	api.SECRET_KEY = secretKey
+	api.API_KEY = apiKey
 	// Warning or errors can be collected in a slice type
 	var diags diag.Diagnostics
-	client := authClient.New(&apiKey, &secretKey)
+	client := authClient.New(&apiKey, &secretKey, &url)
 	return client, diags
 }

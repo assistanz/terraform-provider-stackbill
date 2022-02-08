@@ -2,7 +2,6 @@ package snapshot
 
 import (
 	"terraform-provider-stackbill/api"
-	"terraform-provider-stackbill/auth"
 )
 
 // Snapshot Object
@@ -25,11 +24,11 @@ type vmSnapshotApi struct {
 // TODO - Documentation
 func (vs *vmSnapshotApi) SnapshotVm(vr map[string]interface{}, meta interface{}) (string, error) {
 	// Meta information
-	m := meta.(*auth.AuthKeys)
-	apiKey := m.ApiKey
-	secretKey := m.SecretKey
+	// m := meta.(*auth.AuthKeys)
+	// apiKey := m.ApiKey
+	// secretKey := m.SecretKey
 	endPoint := api.GetVmSnapshotCreateApi()
-	response, err := httpClient.PostJson(endPoint, apiKey, secretKey, vr)
+	response, err := httpClient.PostJson(endPoint, vr)
 	if err != nil {
 		return "", err
 	}
@@ -40,11 +39,11 @@ func (vs *vmSnapshotApi) SnapshotVm(vr map[string]interface{}, meta interface{})
 // TODO - Documentation
 func (vs *vmSnapshotApi) DeleteVmSnapshot(uuid string, meta interface{}) (string, error) {
 	// Meta information
-	m := meta.(*auth.AuthKeys)
-	apiKey := m.ApiKey
-	secretKey := m.SecretKey
+	// m := meta.(*auth.AuthKeys)
+	// apiKey := m.ApiKey
+	// secretKey := m.SecretKey
 	endPoint := api.GetVmSnapshotDeleteApi(uuid)
-	response, err := httpClient.Delete(endPoint, apiKey, secretKey)
+	response, err := httpClient.Delete(endPoint)
 	if err != nil {
 		return "", err
 	}
@@ -55,14 +54,14 @@ func (vs *vmSnapshotApi) DeleteVmSnapshot(uuid string, meta interface{}) (string
 // TODO - Documentation
 func (vs *vmSnapshotApi) ListVmSnapshots(zoneUuid string, uuid string, meta interface{}) (string, error) {
 	// Meta information
-	m := meta.(*auth.AuthKeys)
-	apiKey := m.ApiKey
-	secretKey := m.SecretKey
+	// m := meta.(*auth.AuthKeys)
+	// apiKey := m.ApiKey
+	// secretKey := m.SecretKey
 	endPoint := api.GetVmSnapshotListApi(zoneUuid)
 	if uuid != "" {
 		endPoint += "&uuid=" + uuid
 	}
-	response, err := httpClient.Get(endPoint, apiKey, secretKey)
+	response, err := httpClient.Get(endPoint)
 	if err != nil {
 		return "", err
 	}

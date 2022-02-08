@@ -6,5 +6,5 @@ var (
 
 // Zone List api
 func GetZoneListApi() string {
-	return EndPoint + "/" + zoneList
+	return END_POINT + "/" + zoneList
 }

@@ -2,7 +2,6 @@ package storageoffering
 
 import (
 	"terraform-provider-stackbill/api"
-	"terraform-provider-stackbill/auth"
 )
 
 // New Storage Offering Api
@@ -28,14 +27,14 @@ It will be generated autmatically By terraform
 */
 func (co *storageOfferingApi) ListStorageOfferings(zoneId string, uuid string, meta interface{}) (string, error) {
 	// Meta information
-	m := meta.(*auth.AuthKeys)
-	apiKey := m.ApiKey
-	secretKey := m.SecretKey
+	// m := meta.(*auth.AuthKeys)
+	// apiKey := m.ApiKey
+	// secretKey := m.SecretKey
 	endPoint := api.GetStorageOfferingListApi(zoneId)
 	if uuid != "" {
 		endPoint += "&uuid=" + uuid
 	}
-	response, err := httpClient.Get(endPoint, apiKey, secretKey)
+	response, err := httpClient.Get(endPoint)
 	if err != nil {
 		return "", err
 	}
