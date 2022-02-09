@@ -46,7 +46,7 @@ func (nt *networkUtils) GetCreateNetworkOptionalRequest(d *schema.ResourceData) 
 // TODO - Documentation
 func (nt *networkUtils) GetNetworkActionRequest(d *schema.ResourceData) map[string]interface{} {
 	request := make(map[string]interface{})
-	request["networkUuid"] = d.Get("network_uuid").(bool)
-	request["uuid"] = d.Get("virutal_machine_uuid").(bool)
+	request["networkUuid"] = d.Get("network_uuid").(string)
+	request["uuid"] = d.Get("virutal_machine_uuid").(string)
 	return request
 }

@@ -20,13 +20,13 @@ variable "coffee_name" {
 #   zone_uuid                = "74b12720-73ce-49b6-857f-48cdac6dcd3f"
 # }
 
-resource "stackbill_network" "my-server" {
-  description = "terraform test"
-  name                  = "terraform volume teo"
-  network_offering_uuid              = "19c28a5d-0237-450d-b47a-dbddc67aa0df"
-  virtual_machine_uuid = "4d9150e6-64b5-451a-8851-0a4ea5142242"
-  zone_uuid                = "74b12720-73ce-49b6-857f-48cdac6dcd3f"
-}
+# resource "stackbill_network" "my-server" {
+#   description = "terraform test"
+#   name                  = "terraform volume teo"
+#   network_offering_uuid              = "19c28a5d-0237-450d-b47a-dbddc67aa0df"
+#   virtual_machine_uuid = "4d9150e6-64b5-451a-8851-0a4ea5142242"
+#   zone_uuid                = "74b12720-73ce-49b6-857f-48cdac6dcd3f"
+# }
 # resource "stackbill_network_attach" "my-server" {
 #   network_uuid              = "80934451-21e7-4bb3-be39-30a8d14db2ac"
 #   virutal_machine_uuid = "4d9150e6-64b5-451a-8851-0a4ea5142242"
@@ -124,3 +124,86 @@ resource "stackbill_network" "my-server" {
 # ssh_key_name
 # storage_offering_uuid
 # network_uuid
+
+
+# This is required for Terraform 0.13+
+# terraform {
+#   required_providers {
+#     stackbill = {
+#       version = "~> 1.0.0"
+#       source  = "stackbill.com/assistanz/stackbill"
+#     }
+#   }
+# }
+
+# provider "stackbill" {
+#   url    = "http://wolfapp.assistanz24x7.com/restapi"
+#   api_key    = "NqkTfkADuBFCNid2ypPViqq3M2vMOQddtjLyIQJ84LygYkppwfO1DZFCZX5H"
+#   secret_key = "H_eRcufZShygDM2ZV6g94gA9ecmgE9cKGTZ31VOkGXE72EiupuMnhuMZd0hs"
+# }
+
+
+#creating stackbill_instance
+# resource "stackbill_instance" "my-server" {
+#   compute_offering_uuid = "c674ac49-32cd-4aae-96f8-25458bded6ad"
+#   cpu_core              = "3"
+#   disk_size             = 0
+#   hypervisor_name       = "XenServer"
+#   # memory                = "0"
+#   name                  = "AzTestingVmOne"
+#   network_uuid          = "f385c6af-a900-415d-a131-44d1fc6ae4e3"
+
+#   # security_group_name   = "string"
+#   # ssh_key_name          = "string"
+#   storage_offering_uuid = "45ac1fe4-9e40-47d2-81a3-7dd98811bf27"
+#   template_uuid         = "670dc0de-8958-449e-a217-262f666c2fa6"
+#   zone_uuid             = "74b12720-73ce-49b6-857f-48cdac6dcd3f"
+# }
+
+# #updating VM status
+# resource "stackbill_instance_actions" "status" {
+#   uuid  = stackbill_instance.my-server.id
+#   action = "Stop"
+# }
+
+# #updating display name
+# resource "stackbill_instance_update_name" "update_name" {
+#   uuid  = stackbill_instance.my-server.id
+#   name = "TerraformTestVM"
+# }
+
+#resizing VM
+resource "stackbill_instance_resize" "resize" {
+  uuid  = "c7e8ba23-0c79-47ab-9fd3-5158ba275c64"
+  compute_offering_uuid = "c674ac49-32cd-4aae-96f8-25458bded6ad"
+  cpu_core = "4"
+  memory = "512"
+}
+
+# creating network
+resource "stackbill_network" "TerraformNetwork" {
+  description = "network created to test terraform"
+  name = "TerraformNetwork"
+  # virtual_machine_uuid = stackbill_instance.my-server.id
+  network_offering_uuid = "19c28a5d-0237-450d-b47a-dbddc67aa0df"
+  zone_uuid = "74b12720-73ce-49b6-857f-48cdac6dcd3f"
+  is_public = "true"
+}
+
+# #creating new volume
+resource "stackbill_volume" "newvolume" {
+  disk_size = 1024
+  name = "ExtraVolumeForTerrformVM"
+  storage_offering_uuid = "728e9c82-506d-4afb-a26f-3f74688e0740"
+  zone_uuid = "74b12720-73ce-49b6-857f-48cdac6dcd3f"
+}
+
+
+# #creating snapshot
+resource "stackbill_instance_snapshot" "snapshot" {
+  name = "terraform_VM_Snapshot"
+  description = "snapshot of VM created with terraform"
+  virtual_machine_uuid = "c7e8ba23-0c79-47ab-9fd3-5158ba275c64"
+  zone_uuid = "74b12720-73ce-49b6-857f-48cdac6dcd3f"
+  snapshot_memory = "0"
+}

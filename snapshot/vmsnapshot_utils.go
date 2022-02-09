@@ -22,10 +22,10 @@ type vmSnapshotUtils struct {
 // TODO - Documentation
 func (vs *vmSnapshotUtils) GetVmSnapshotRequest(d *schema.ResourceData) map[string]interface{} {
 	request := make(map[string]interface{})
-	request["description"] = d.Get("description").(bool)
-	request["name"] = d.Get("name").(bool)
+	request["description"] = d.Get("description").(string)
+	request["name"] = d.Get("name").(string)
 	request["snapshotMemory"] = d.Get("snapshot_memory").(bool)
-	request["virtualmachineUuid"] = d.Get("virtual_machine_uuid").(bool)
-	request["zoneUuid"] = d.Get("zone_uuid").(bool)
+	request["virtualmachineUuid"] = d.Get("virtual_machine_uuid").(string)
+	request["zoneUuid"] = d.Get("zone_uuid").(string)
 	return request
 }

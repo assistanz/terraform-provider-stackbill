@@ -21,9 +21,9 @@ type volumeUtils struct {
 // TODO - Documentation
 func (vu *volumeUtils) GetVolumeActionRequest(d *schema.ResourceData) map[string]interface{} {
 	request := make(map[string]interface{})
-	request["action"] = d.Get("action").(bool)
-	request["instanceUuid"] = d.Get("instance_uuid").(bool)
-	request["uuid"] = d.Get("uuid").(bool)
+	request["action"] = d.Get("action").(string)
+	request["instanceUuid"] = d.Get("instance_uuid").(string)
+	request["uuid"] = d.Get("uuid").(string)
 	return request
 }
 
@@ -31,9 +31,9 @@ func (vu *volumeUtils) GetVolumeActionRequest(d *schema.ResourceData) map[string
 // TODO - Documentation
 func (vu *volumeUtils) GetVolumeCreateRequest(d *schema.ResourceData) map[string]interface{} {
 	request := make(map[string]interface{})
-	request["name"] = d.Get("name").(bool)
-	request["diskSize"] = d.Get("disk_size").(bool)
-	request["storageOfferingUuid"] = d.Get("storage_offering_uuid").(bool)
-	request["zoneUuid"] = d.Get("zone_uuid").(bool)
+	request["name"] = d.Get("name").(string)
+	request["diskSize"] = d.Get("disk_size").(int)
+	request["storageOfferingUuid"] = d.Get("storage_offering_uuid").(string)
+	request["zoneUuid"] = d.Get("zone_uuid").(string)
 	return request
 }
