@@ -20,13 +20,13 @@ variable "coffee_name" {
 #   zone_uuid                = "74b12720-73ce-49b6-857f-48cdac6dcd3f"
 # }
 
-# resource "stackbill_network" "my-server" {
-#   description = "terraform test"
-#   name                  = "terraform volume teo"
-#   network_offering_uuid              = "19c28a5d-0237-450d-b47a-dbddc67aa0df"
-#   virtual_machine_uuid = "4d9150e6-64b5-451a-8851-0a4ea5142242"
-#   zone_uuid                = "74b12720-73ce-49b6-857f-48cdac6dcd3f"
-# }
+resource "stackbill_network" "my-server" {
+  description = "terraform test"
+  name                  = "terraform volume teo"
+  network_offering_uuid              = "19c28a5d-0237-450d-b47a-dbddc67aa0df"
+  virtual_machine_uuid = "4d9150e6-64b5-451a-8851-0a4ea5142242"
+  zone_uuid                = "74b12720-73ce-49b6-857f-48cdac6dcd3f"
+}
 # resource "stackbill_network_attach" "my-server" {
 #   network_uuid              = "80934451-21e7-4bb3-be39-30a8d14db2ac"
 #   virutal_machine_uuid = "4d9150e6-64b5-451a-8851-0a4ea5142242"

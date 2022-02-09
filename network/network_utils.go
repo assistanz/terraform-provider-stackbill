@@ -38,7 +38,7 @@ func (nt *networkUtils) GetCreateNetworkRequest(d *schema.ResourceData) map[stri
 func (nt *networkUtils) GetCreateNetworkOptionalRequest(d *schema.ResourceData) map[string]interface{} {
 	request := make(map[string]interface{})
 	request["isPublic"] = d.Get("is_public").(bool)
-	request["networkOfferingUuid"] = d.Get("security_group_id").(string)
+	request["securityGroupId"] = d.Get("security_group_id").(string)
 	return request
 }
 
