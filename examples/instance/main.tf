@@ -58,10 +58,19 @@ variable "coffee_name" {
 # }
 
 # resource "stackbill_volume_actions" "my-server" {
-#   uuid = "9fe3dd14-bdb2-4c9a-8742-85ead82475cd"
-#   action = "Attach"
-#   instance_uuid  = "4d9150e6-64b5-451a-8851-0a4ea5142242"
+#   uuid = "aa94580d-c899-4e02-9d9a-b8597b257937"
+#   action = "Detach"
+#   instance_uuid  = "a17659f2-37b2-4973-ab52-f1ece7c846bb"
 # }
+
+# attach network to VM
+
+resource "stackbill_network_actions" "attach_network" {
+  network_uuid = "f385c6af-a900-415d-a131-44d1fc6ae4e3"
+  virutal_machine_uuid = "a17659f2-37b2-4973-ab52-f1ece7c846bb"
+  action = "Add"
+
+}
 
 # data "stackbill_volume_list" "all" {
 #   zone_uuid = "74b12720-73ce-49b6-857f-48cdac6dcd3f"
@@ -107,7 +116,7 @@ variable "coffee_name" {
 #   hypervisor_name       = "string"
 #   memory                = "0"
 #   name                  = "AzTestingVmTwo"
-#   network_uuid          = "f215bcd2-8109-484d-91b3-20fc1cc8293b"
+#   network_uuid          = "f4a12b6e-fcde-46d1-a283-235b6d24a647"
 #   security_group_name   = "string"
 #   ssh_key_name          = "string"
 #   storage_offering_uuid = "string"
@@ -166,44 +175,58 @@ variable "coffee_name" {
 #   action = "Stop"
 # }
 
-# #updating display name
+#updating display name
 # resource "stackbill_instance_update_name" "update_name" {
-#   uuid  = stackbill_instance.my-server.id
-#   name = "TerraformTestVM"
+#   uuid  = "a17659f2-37b2-4973-ab52-f1ece7c846bb"
+#   name = "pra-vm3"
 # }
 
 #resizing VM
-resource "stackbill_instance_resize" "resize" {
-  uuid  = "c7e8ba23-0c79-47ab-9fd3-5158ba275c64"
-  compute_offering_uuid = "c674ac49-32cd-4aae-96f8-25458bded6ad"
-  cpu_core = "4"
-  memory = "512"
-}
+# resource "stackbill_instance_resize" "resize" {
+#   uuid  = "a17659f2-37b2-4973-ab52-f1ece7c846bb"
+#   compute_offering_uuid = "597b163b-18f0-40b1-82c0-e499bff5a2d5"
+#   cpu_core = "2"
+#   memory = "2048"
+# }
 
-# creating network
-resource "stackbill_network" "TerraformNetwork" {
-  description = "network created to test terraform"
-  name = "TerraformNetwork"
-  # virtual_machine_uuid = stackbill_instance.my-server.id
-  network_offering_uuid = "19c28a5d-0237-450d-b47a-dbddc67aa0df"
-  zone_uuid = "74b12720-73ce-49b6-857f-48cdac6dcd3f"
-  is_public = "true"
-}
+# # creating network
+# resource "stackbill_network" "TerraformNetwork" {
+#   description = "network created to test terraform"
+#   name = "TerraformNetwork"
+#   # virtual_machine_uuid = stackbill_instance.my-server.id
+#   network_offering_uuid = "19c28a5d-0237-450d-b47a-dbddc67aa0df"
+#   zone_uuid = "74b12720-73ce-49b6-857f-48cdac6dcd3f"
+#   is_public = "true"
+# }
 
-# #creating new volume
-resource "stackbill_volume" "newvolume" {
-  disk_size = 1024
-  name = "ExtraVolumeForTerrformVM"
-  storage_offering_uuid = "728e9c82-506d-4afb-a26f-3f74688e0740"
-  zone_uuid = "74b12720-73ce-49b6-857f-48cdac6dcd3f"
-}
+# # #creating new volume
+# resource "stackbill_volume" "newvolume" {
+#   disk_size = 1024
+#   name = "ExtraVolumeForTerrformVM"
+#   storage_offering_uuid = "728e9c82-506d-4afb-a26f-3f74688e0740"
+#   zone_uuid = "74b12720-73ce-49b6-857f-48cdac6dcd3f"
+# }
 
 
-# #creating snapshot
-resource "stackbill_instance_snapshot" "snapshot" {
-  name = "terraform_VM_Snapshot"
-  description = "snapshot of VM created with terraform"
-  virtual_machine_uuid = "c7e8ba23-0c79-47ab-9fd3-5158ba275c64"
-  zone_uuid = "74b12720-73ce-49b6-857f-48cdac6dcd3f"
-  snapshot_memory = "0"
-}
+# # #creating snapshot
+# resource "stackbill_instance_snapshot" "snapshot" {
+#   name = "terraform_VM_Snapshot"
+#   description = "snapshot of VM created with terraform"
+#   virtual_machine_uuid = "c7e8ba23-0c79-47ab-9fd3-5158ba275c64"
+#   zone_uuid = "74b12720-73ce-49b6-857f-48cdac6dcd3f"
+#   snapshot_memory = "0"
+# }
+
+#updating display name
+# resource "stackbill_instance_update_name" "update_name" {
+#   uuid  = "c7e8ba23-0c79-47ab-9fd3-5158ba275c64"
+#   name = "TerraformTestVMOne"
+# }
+
+#resizing VM
+# resource "stackbill_instance_resize" "resize" {
+#   uuid  = "c7e8ba23-0c79-47ab-9fd3-5158ba275c64"
+#   compute_offering_uuid = "c674ac49-32cd-4aae-96f8-25458bded6ad"
+#   cpu_core = "5"
+#   memory = "512"
+# }

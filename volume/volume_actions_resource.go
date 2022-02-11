@@ -70,7 +70,6 @@ func (va *volumeActionsResource) Update(ctx context.Context, d *schema.ResourceD
 	// Get name and object
 	uuid := d.Get("uuid").(string)
 	action := d.Get("action").(string)
-	log.SetFlags(0)
 	// Warning or errors can be collected in a slice type
 	var diags diag.Diagnostics
 	// Action

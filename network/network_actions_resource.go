@@ -67,10 +67,27 @@ func (nr *networkActionResource) Read(ctx context.Context, d *schema.ResourceDat
 // Snapshot Instance
 // TODO - Documentation
 func (vs *networkActionResource) Update(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	// Meta information
-	// m := meta.(*auth.AuthKeys)
+	// Get name and object
+	uuid := d.Get("virutal_machine_uuid").(string)
+	action := d.Get("action").(string)
 	// Warning or errors can be collected in a slice type
 	var diags diag.Diagnostics
+	// Action
+	log.Println("Network " + action + " initiated...!")
+	actionRequest := networkUtilObj.GetNetworkActionRequest(d)
+	response, err := networkApiObj.NetworkActions(action, actionRequest, meta)
+	if err != nil {
+		return diag.FromErr(err)
+	}
+	var resJson map[string]interface{}
+	if err := json.Unmarshal([]byte(response), &resJson); err != nil {
+		return diag.FromErr(err)
+	}
+	output := utils.FormatJsonString(response)
+	log.Println(output)
+	log.Println("Network " + action + " completed...!")
+	// Update the state
+	d.SetId(uuid)
 	return diags
 }
 
