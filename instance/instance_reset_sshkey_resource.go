@@ -53,17 +53,6 @@ func (irs *instanceResetSshkeyResource) Create(ctx context.Context, d *schema.Re
 	}
 	// Wait to start or stop the instance
 	time.Sleep(20 * time.Second)
-	for {
-		status, err := instanceApiObj.GetInstanceStatus(uuid, meta)
-		if err != nil {
-			log.Println(err.Error())
-			break
-		}
-		if status == "RUNNING" {
-			break
-		}
-		time.Sleep(10 * time.Second)
-	}
 	output := utils.FormatJsonString(response)
 	log.Println(output)
 	log.Println("Instance Reset sshkey successful...!")
@@ -96,17 +85,6 @@ func (irs *instanceResetSshkeyResource) Update(ctx context.Context, d *schema.Re
 	}
 	// Wait to start or stop the instance
 	time.Sleep(20 * time.Second)
-	for {
-		status, err := instanceApiObj.GetInstanceStatus(uuid, meta)
-		if err != nil {
-			log.Println(err.Error())
-			break
-		}
-		if status == "RUNNING" {
-			break
-		}
-		time.Sleep(10 * time.Second)
-	}
 	output := utils.FormatJsonString(response)
 	log.Println(output)
 	log.Println("Instance Reset sshkey successful...!")

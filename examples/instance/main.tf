@@ -57,19 +57,24 @@ variable "coffee_name" {
 #   zone_uuid = "74b12720-73ce-49b6-857f-48cdac6dcd3f"
 # }
 
-# resource "stackbill_volume_actions" "my-server" {
-#   uuid = "aa94580d-c899-4e02-9d9a-b8597b257937"
-#   action = "Detach"
-#   instance_uuid  = "a17659f2-37b2-4973-ab52-f1ece7c846bb"
-# }
+resource "stackbill_volume_actions" "my-server" {
+  uuid = "4914ae3d-3f0d-4cf5-9910-b25c4977d3c3"
+  action = "Attach"
+  instance_uuid  = "49c4843d-9e4e-46ff-a004-518fa34efb2a"
+}
 
 # attach network to VM
 
-resource "stackbill_network_actions" "attach_network" {
-  network_uuid = "f385c6af-a900-415d-a131-44d1fc6ae4e3"
-  virutal_machine_uuid = "a17659f2-37b2-4973-ab52-f1ece7c846bb"
-  action = "Add"
+# resource "stackbill_network_actions" "attach_network" {
+#   network_uuid = "f385c6af-a900-415d-a131-44d1fc6ae4e3"
+#   virutal_machine_uuid = "a17659f2-37b2-4973-ab52-f1ece7c846bb"
+#   action = "Delete"
+# }
 
+resource "stackbill_network_actions" "attach_network" {
+  network_uuid = "ab8d6f1a-7d6a-4ab6-b564-e625edfb796b"
+  virutal_machine_uuid = "49c4843d-9e4e-46ff-a004-518fa34efb2a"
+  action = "Delete"
 }
 
 # data "stackbill_volume_list" "all" {
@@ -176,18 +181,23 @@ resource "stackbill_network_actions" "attach_network" {
 # }
 
 #updating display name
-# resource "stackbill_instance_update_name" "update_name" {
-#   uuid  = "a17659f2-37b2-4973-ab52-f1ece7c846bb"
-#   name = "pra-vm3"
-# }
+resource "stackbill_instance_update_name" "update_name" {
+  uuid  = "a17659f2-37b2-4973-ab52-f1ece7c846bb"
+  name = "pra-vm3"
+}
 
 #resizing VM
-# resource "stackbill_instance_resize" "resize" {
-#   uuid  = "a17659f2-37b2-4973-ab52-f1ece7c846bb"
-#   compute_offering_uuid = "597b163b-18f0-40b1-82c0-e499bff5a2d5"
-#   cpu_core = "2"
-#   memory = "2048"
-# }
+resource "stackbill_instance_resize" "resize" {
+  uuid  = "a17659f2-37b2-4973-ab52-f1ece7c846bb"
+  compute_offering_uuid = "597b163b-18f0-40b1-82c0-e499bff5a2d5"
+  cpu_core = "1"
+  memory = "1024"
+}
+
+resource "stackbill_instance_reset_sshkey" "reset" {
+  uuid = "a17659f2-37b2-4973-ab52-f1ece7c846bb"
+  ssh_key_uuid = "a6903126-ff89-4878-971f-fba79ab4c8bc"
+}
 
 # # creating network
 # resource "stackbill_network" "TerraformNetwork" {
