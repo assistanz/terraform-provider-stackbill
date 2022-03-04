@@ -6,6 +6,10 @@ The goal of this project is to create Stackbill resources via terraform
 
 This would help us to create the stackbill resources via Terraform.
 
+## Description
+[Terraform](https://www.terraform.io/downloads.html) 1.1.x
+[Go](https://golang.org/doc/install) 1.17 (to build the provider plugin)
+
 [![N|Stackbill](https://www.stackbill.com/wp-content/uploads/2017/11/stackbill-logo-white.png)](https://www.stackbill.com/)
 
 ## Usage
