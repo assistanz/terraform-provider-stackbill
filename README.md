@@ -24,8 +24,8 @@ Provider configuration
 terraform {
   required_providers {
     stackbill = {
-      version = "~> 1.0.0"
-      source  = "stackbill.com/assistanz/stackbill"
+      source = "assistanz/stackbill"
+      version = "0.1.0"
     }
   }
 }
